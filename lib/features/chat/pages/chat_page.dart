@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'message_model.dart';
+import '../data/data.dart';
 
 // class Message extends StateNotifier<String> {
 //   Message() : super("");
@@ -20,10 +20,10 @@ final messageListProvider =
     StateNotifierProvider<MessageList, List<Message>>((ref) => MessageList());
 // final messageProvider = StateNotifierProvider((ref) => Message());
 
-class ChatScreen extends StatelessWidget {
+class ChatPage extends StatelessWidget {
   final TextEditingController _textController = TextEditingController();
 
-  ChatScreen({super.key});
+  ChatPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
