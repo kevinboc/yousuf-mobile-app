@@ -26,6 +26,7 @@ class TextInputWidget extends ConsumerWidget {
                 ref
                     .read(messageListProvider.notifier)
                     .addMessage(_textController.text, true);
+                ref.read(messageListProvider.notifier).computerResponse();
                 _textController.clear();
               },
               icon: const Icon(Icons.arrow_upward),
