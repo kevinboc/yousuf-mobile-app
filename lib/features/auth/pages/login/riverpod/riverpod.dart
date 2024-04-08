@@ -1,2 +1,2 @@
-// Export login riverpod
-export 'login_riverpod.dart';
+// Export auth(login) provider
+export 'auth_provider.dart';

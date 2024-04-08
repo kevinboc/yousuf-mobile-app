@@ -8,6 +8,8 @@
 analyzer:
   plugins:
     - custom_lint
+  errors:
+    invalid_annotation_target: ignore
 
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
