@@ -92,15 +92,18 @@ class DioClient {
 
   // POST request function
   Future<Either<Failure, T>> postRequest<T>(String url,
-      {Map<String, dynamic>? data,
+      {required Map<String, dynamic> data,
       required ResponseConverter<T> converter,
       bool isIsolate = true}) async {
     try {
       _logger.i("Dio Client: Trying post request");
       _logger.i("Dio Client: ${data.toString()}");
 
+      // Convert data json to FormData
+      final formData = FormData.fromMap(data);
+
       // Calls post method in dio instance
-      final response = await _dio.post(url, data: data);
+      final response = await _dio.post(url, data: formData);
 
       _logger.i("Dio Client: After calling dio post method");
 

@@ -35,6 +35,8 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
       return AuthState.failure(l.toString());
     }, (r) {
       _logger.i("Auth Notifier: Success state");
+      _logger.i("Auth Notifier: data = ${r.toString()}");
+      // TODO: Fix token issue. Most likely token is not a key:value pair in json, but in the header
       return AuthState.success(r.token);
     });
 

@@ -34,7 +34,9 @@ class RegisterNotifier extends AutoDisposeNotifier<RegisterState> {
       return RegisterState.failure(l.toString());
     }, (r) {
       _logger.i("Auth Notifier: Success state");
+      _logger.i("Auth Notifier: ${r.toString()}");
       return RegisterState.success(r);
+      // TODO: Once registered, the Register entity does not contain a token
     });
 
     _logger.i("Auth Notifier: ${state.toString()}");
