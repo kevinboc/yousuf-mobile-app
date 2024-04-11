@@ -16,7 +16,7 @@ Widget menuOptions(BuildContext context) {
             onTap: () {
               //Navigate to page
               //This closes the menu
-              // context.go();
+              context.go('/login');
               Navigator.pop(context);
             },
           ),

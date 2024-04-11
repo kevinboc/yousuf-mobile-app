@@ -1,23 +1,33 @@
-// Abstract Failure class
 abstract class Failure {
-  // Failure class varaibles
-  final String message;
-
-  // Failure class constructor
-  const Failure({required this.message});
+  /// ignore: avoid_unused_constructor_parameters
+  const Failure([List properties = const <dynamic>[]]);
 }
 
-// Cache failure class
-class CacheFailure extends Failure {
-  CacheFailure({required String message}) : super(message: message);
-}
-
-// No data failure class
-class NoDataFailure extends Failure {
-  NoDataFailure({required String message}) : super(message: message);
-}
-
-// Server failure class
 class ServerFailure extends Failure {
-  ServerFailure({required String message}) : super(message: message);
+  final String? message;
+
+  const ServerFailure(this.message);
+
+  @override
+  bool operator ==(Object other) =>
+      other is ServerFailure && other.message == message;
+
+  @override
+  int get hashCode => message.hashCode;
+}
+
+class NoDataFailure extends Failure {
+  @override
+  bool operator ==(Object other) => other is NoDataFailure;
+
+  @override
+  int get hashCode => 0;
+}
+
+class CacheFailure extends Failure {
+  @override
+  bool operator ==(Object other) => other is CacheFailure;
+
+  @override
+  int get hashCode => 0;
 }

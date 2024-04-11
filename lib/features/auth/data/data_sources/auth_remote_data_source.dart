@@ -8,10 +8,11 @@ import '../../../../core/core.dart';
 // Abstract class of the authentication remote data source
 abstract class AuthRemoteDataSource {
   // Abstract login method
-  Future<Either<Failure, UserModel>> login(UserParams userParams);
+  Future<Either<Failure, LoginResponse>> login(LoginParams loginParams);
 
   // Abstract register method
-  Future<Either<Failure, UserModel>> register(UserParams userParams);
+  Future<Either<Failure, RegisterResponse>> register(
+      RegisterParams registerParams);
 }
 
 // Implementing abstact class
@@ -24,22 +25,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   // Implementing login function for remote data source
   @override
-  Future<Either<Failure, UserModel>> login(UserParams userParams) async {
+  Future<Either<Failure, LoginResponse>> login(LoginParams loginParams) async {
     final response = await _client.postRequest(APIList.login,
-        data: userParams.toJson(),
+        data: loginParams.toJson(),
         converter: (response) =>
-            UserModel.fromJson(response as Map<String, dynamic>));
+            LoginResponse.fromJson(response as Map<String, dynamic>));
 
     return response;
   }
 
   // Implementing register function for remote data source
   @override
-  Future<Either<Failure, UserModel>> register(UserParams userParams) async {
+  Future<Either<Failure, RegisterResponse>> register(
+      RegisterParams registerParams) async {
     final response = await _client.postRequest(APIList.register,
-        data: userParams.toJson(),
+        data: registerParams.toJson(),
         converter: (response) =>
-            UserModel.fromJson(response as Map<String, dynamic>));
+            RegisterResponse.fromJson(response as Map<String, dynamic>));
 
     return response;
   }
