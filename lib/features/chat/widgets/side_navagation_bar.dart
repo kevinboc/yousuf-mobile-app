@@ -16,14 +16,21 @@ Widget menuOptions(BuildContext context) {
             onTap: () {
               //Navigate to page
               //This closes the menu
-              context.go('/login');
+              context.go('/');
               Navigator.pop(context);
             },
           ),
           ListTile(
               title: const Text("Chats"),
               onTap: () {
+                context.go('/chat_list');
                 Navigator.pop(context);
+              }),
+          ListTile(
+              title: const Text("Create New AI"),
+              onTap: () {
+                Navigator.pop(context);
+                context.go("/trainnewai");
               }),
           ListTile(
               title: const Text("Settings"),
@@ -42,6 +49,7 @@ Widget menuOptions(BuildContext context) {
           child: ListTile(
               title: const Text("Logout"),
               onTap: () {
+                context.go('/login');
                 Navigator.pop(context);
               }),
         ),

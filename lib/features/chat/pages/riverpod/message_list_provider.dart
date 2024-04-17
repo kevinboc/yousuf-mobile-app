@@ -6,7 +6,8 @@ import 'package:dio/dio.dart';
 class MessageList extends StateNotifier<List<Message>> {
   @override
   MessageList() : super([]);
-  void addMessage(String text, bool fromUser) => state = [
+  void addMessage(String text, bool fromUser, int chatID, int userID) =>
+      state = [
         ...state,
         Message(
             message: text,
@@ -18,18 +19,25 @@ class MessageList extends StateNotifier<List<Message>> {
 
   void computerResponse() async {
     final Dio dio = Dio();
-    final response = await dio.post('http://localhost:8080/messages',
-        data: {'message': state[state.length - 1].message});
-    if (response.statusCode == 200) {
+    final response = await dio.post(
+      'https://yousuf195.azurewebsites.net/login',
+      data: {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com",
+        "password": "password123"
+      },
+    );
+    if (response.statusCode == 201) {
       print(response);
-      state = [
-        ...state,
-        Message(
-            message: "name",
-            userEmail: "email",
-            time: TimeOfDay.now(),
-            isFromUser: false)
-      ];
+      // state = [
+      //   ...state,
+      //   Message(
+      //       message: "name",
+      //       userEmail: "email",
+      //       time: TimeOfDay.now(),
+      //       isFromUser: false)
+      // ];
     } else {
       print("ERROR");
       throw Error();

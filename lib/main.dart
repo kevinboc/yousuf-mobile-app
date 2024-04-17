@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Features
+import 'package:yousuf_mobile_app/features/chat%20list/pages/chat_list_page.dart';
 import 'features/features.dart';
 
 Future<void> main() async {
@@ -33,9 +34,9 @@ final GoRouter _router = GoRouter(initialLocation: '/', routes: <RouteBase>[
       }),
   GoRoute(path: '/ai_list', builder: (context, state) => const Placeholder()),
   GoRoute(
-    path: '/placeholder',
-    name: "placeholder",
-    builder: (context, state) => const Placeholder(),
+    path: '/chat_list',
+    name: "chatlist",
+    builder: (context, state) => const ChatListPage(),
   )
 ]);
 

@@ -5,7 +5,7 @@ Widget messageItem(Message content) {
   var alignment =
       content.isFromUser ? CrossAxisAlignment.end : CrossAxisAlignment.start;
   return Column(crossAxisAlignment: alignment, children: [
-    const Text("name"),
+    // const Text("name"),
     Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -13,7 +13,8 @@ Widget messageItem(Message content) {
       child: Text(content.message),
     ),
     Text(
-      content.time.toString().substring(10, content.time.toString().length - 1),
+      // content.time.toString().substring(10, content.time.toString().length - 1),
+      "You",
       style: const TextStyle(fontSize: 12),
     )
   ]);
