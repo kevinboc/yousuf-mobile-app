@@ -14,7 +14,7 @@ _$ChatMessagesImpl _$$ChatMessagesImplFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       title: json['title'] as String?,
-      userID: json['userID'] as int,
+      userID: json['userID'] as int?,
     );
 
 Map<String, dynamic> _$$ChatMessagesImplToJson(_$ChatMessagesImpl instance) =>

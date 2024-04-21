@@ -1,49 +1,55 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yousuf_mobile_app/features/chat/data/models/message_model.dart';
-import 'package:dio/dio.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:yousuf_mobile_app/features/chat/domain/entities/chat_messages.dart';
+import 'package:yousuf_mobile_app/features/chat/domain/entities/message.dart';
+import 'package:yousuf_mobile_app/features/chat/domain/providers/retrieve_chat_messages_provider.dart';
+import 'package:yousuf_mobile_app/features/chat/domain/usecases/retrieve_chat_messages.dart';
+
+// @freezed
+// class ChatMessagesState with $_ChatMessagesState{
+//   const factory ChatMessagesState({
+//     @Default(true) bool isLoading,
+//     required ChatMessages chatMessages,
+//   }) = _ChatMessagesState;
+
+//   const ChatMessagesState._();
+// }
+
+// class ChatMessagesNotifier extends StateNotifier<ChatMessagesState>{
+//   ChatMessagesNotifier() : super(const ChatMessagesState(chatMessages: ChatMessages()));
+
+//   loadMessages() async {
+//     state = state.copyWith(isLoading: true);
+
+//     final chatMessagesResponse = await retrieveChatMessagesProvider
+//   }
+// }
 
 class MessageList extends StateNotifier<List<Message>> {
   @override
-  MessageList() : super([]);
-  void addMessage(String text, bool fromUser, int chatID, int userID) =>
-      state = [
-        ...state,
-        Message(
-            message: text,
-            userEmail: "testEmail",
-            isFromUser: fromUser,
-            time: TimeOfDay.now())
-      ];
-  List<Message> get messageList => state;
-
-  void computerResponse() async {
-    final Dio dio = Dio();
-    final response = await dio.post(
-      'https://yousuf195.azurewebsites.net/login',
-      data: {
-        "first_name": "John",
-        "last_name": "Doe",
-        "email": "john.doe@example.com",
-        "password": "password123"
-      },
-    );
-    if (response.statusCode == 201) {
-      print(response);
-      // state = [
-      //   ...state,
-      //   Message(
-      //       message: "name",
-      //       userEmail: "email",
-      //       time: TimeOfDay.now(),
-      //       isFromUser: false)
-      // ];
-    } else {
-      print("ERROR");
-      throw Error();
-    }
+  final ref;
+  MessageList(this.ref) : super([]) {
+    retrieveChatHistory();
   }
+  Future<void> retrieveChatHistory() async {
+    final RetrieveChatMessages chatHistoryProvider =
+        ref.watch(retrieveChatMessagesProvider);
+    final messages = await chatHistoryProvider
+        .call(const ChatMessagesParams(chatID: 0, userID: 0));
+    messages.fold((l) => null, (r) => state = r.messageList);
+  }
+
+  void addMessage(String text, bool fromUser, int chatID, int userID) {
+    state = [
+      ...state,
+      Message(text: text, fromUser: fromUser, time: DateTime.now())
+    ];
+  }
+
+  List<Message> get messageList => state;
 }
 
 final messageListProvider =
-    StateNotifierProvider<MessageList, List<Message>>((ref) => MessageList());
+    StateNotifierProvider<MessageList, List<Message>>((ref) {
+  return MessageList(ref);
+});

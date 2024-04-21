@@ -11,8 +11,9 @@ class ChatMessages with _$ChatMessages {
       {int? chatID,
       @Default([]) List<Message> messageList,
       String? title,
-      required int userID}) = _ChatMessages;
+      int? userID}) = _ChatMessages;
 
   factory ChatMessages.fromJson(Map<String, dynamic> json) =>
       _$ChatMessagesFromJson(json);
+  List<Message> get messageList;
 }

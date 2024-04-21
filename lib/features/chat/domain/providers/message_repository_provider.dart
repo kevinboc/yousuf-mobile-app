@@ -5,6 +5,7 @@ import 'package:yousuf_mobile_app/features/chat/data/providers/message_data_sour
 import 'package:yousuf_mobile_app/features/chat/data/repositories/message_repository_impl.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/repository/message_repository.dart';
 
+//allows access of message repository throughout the program
 final messageRepositoryProvider = Provider<MessageRepository>((ref) {
   //from core
   final DioClient dioClient = ref.watch(dioClientProvider);

@@ -7,13 +7,17 @@ import 'package:yousuf_mobile_app/features/chat/domain/repository/message_reposi
 part 'post_chat_message.freezed.dart';
 part 'post_chat_message.g.dart';
 
+//returns type message and says it will only take in
+//objects of type messageparams as input for its functions
 class PostChatMessage extends UseCase<Message, MessageParams> {
   final MessageRepository _repo;
   PostChatMessage(this._repo);
 
   @override
   Future<Either<Failure, Message>> call(MessageParams params) {
+    //call to messagepero with params
     return _repo.message(params);
+    //returns this to the provider
   }
 }
 

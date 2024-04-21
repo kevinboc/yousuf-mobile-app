@@ -23,7 +23,7 @@ mixin _$ChatMessages {
   int? get chatID => throw _privateConstructorUsedError;
   List<Message> get messageList => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
-  int get userID => throw _privateConstructorUsedError;
+  int? get userID => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +38,7 @@ abstract class $ChatMessagesCopyWith<$Res> {
       _$ChatMessagesCopyWithImpl<$Res, ChatMessages>;
   @useResult
   $Res call(
-      {int? chatID, List<Message> messageList, String? title, int userID});
+      {int? chatID, List<Message> messageList, String? title, int? userID});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$ChatMessagesCopyWithImpl<$Res, $Val extends ChatMessages>
     Object? chatID = freezed,
     Object? messageList = null,
     Object? title = freezed,
-    Object? userID = null,
+    Object? userID = freezed,
   }) {
     return _then(_value.copyWith(
       chatID: freezed == chatID
@@ -72,10 +72,10 @@ class _$ChatMessagesCopyWithImpl<$Res, $Val extends ChatMessages>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      userID: null == userID
+      userID: freezed == userID
           ? _value.userID
           : userID // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -89,7 +89,7 @@ abstract class _$$ChatMessagesImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? chatID, List<Message> messageList, String? title, int userID});
+      {int? chatID, List<Message> messageList, String? title, int? userID});
 }
 
 /// @nodoc
@@ -106,7 +106,7 @@ class __$$ChatMessagesImplCopyWithImpl<$Res>
     Object? chatID = freezed,
     Object? messageList = null,
     Object? title = freezed,
-    Object? userID = null,
+    Object? userID = freezed,
   }) {
     return _then(_$ChatMessagesImpl(
       chatID: freezed == chatID
@@ -121,10 +121,10 @@ class __$$ChatMessagesImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      userID: null == userID
+      userID: freezed == userID
           ? _value.userID
           : userID // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -136,7 +136,7 @@ class _$ChatMessagesImpl implements _ChatMessages {
       {this.chatID,
       final List<Message> messageList = const [],
       this.title,
-      required this.userID})
+      this.userID})
       : _messageList = messageList;
 
   factory _$ChatMessagesImpl.fromJson(Map<String, dynamic> json) =>
@@ -156,7 +156,7 @@ class _$ChatMessagesImpl implements _ChatMessages {
   @override
   final String? title;
   @override
-  final int userID;
+  final int? userID;
 
   @override
   String toString() {
@@ -199,7 +199,7 @@ abstract class _ChatMessages implements ChatMessages {
       {final int? chatID,
       final List<Message> messageList,
       final String? title,
-      required final int userID}) = _$ChatMessagesImpl;
+      final int? userID}) = _$ChatMessagesImpl;
 
   factory _ChatMessages.fromJson(Map<String, dynamic> json) =
       _$ChatMessagesImpl.fromJson;
@@ -211,7 +211,7 @@ abstract class _ChatMessages implements ChatMessages {
   @override
   String? get title;
   @override
-  int get userID;
+  int? get userID;
   @override
   @JsonKey(ignore: true)
   _$$ChatMessagesImplCopyWith<_$ChatMessagesImpl> get copyWith =>

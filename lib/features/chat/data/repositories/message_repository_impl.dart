@@ -17,7 +17,6 @@ class MessageRepositoryImpl implements MessageRepository {
   @override
   Future<Either<Failure, ChatMessages>> getChatMessages(
       ChatMessagesParams params) async {
-    // TODO: implement getChatMessages
     if (await networkInfo.isConnected!) {
       final response = await remoteDataSource.getChatMessages(params);
       return response.fold((failure) {
