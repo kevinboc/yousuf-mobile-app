@@ -21,23 +21,22 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
       ChatMessagesParams params) {
     //TODO: RN IS JUST BS
     //find a way to get all messages and store them
-    final response = dio.getRequest(
-      "",
-      queryParamaters: params.toJson(),
-      converter: (response) =>
-          ChatMessages.fromJson(response as Map<String, dynamic>),
-    );
+    final response = dio.getRequest("",
+        queryParamaters: params.toJson(),
+        converter: (response) =>
+            ChatMessages.fromJson(response as Map<String, dynamic>),
+        isIsolate: false);
     return response;
   }
 
   @override
   Future<Either<Failure, Message>> message(MessageParams params) {
-    final response = dio.postRequest(
-      '',
-      data: params.toJson(),
-      converter: (response) =>
-          Message.fromJson(response as Map<String, dynamic>),
-    );
+    final response = dio.postRequest('',
+        data: params.toJson(),
+        converter: (response) =>
+            Message.fromJson(response as Map<String, dynamic>),
+        token: false,
+        isIsolate: false);
     return response;
   }
 
@@ -46,7 +45,9 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
     final response = dio.postRequest("url",
         data: newChatParams.toJson(),
         converter: (response) =>
-            Message.fromJson(response as Map<String, dynamic>));
+            Message.fromJson(response as Map<String, dynamic>),
+        token: false,
+        isIsolate: false);
     return response;
   }
 }

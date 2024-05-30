@@ -29,8 +29,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final response = await _client.postRequest(APIList.login,
         data: loginParams.toJson(),
         converter: (response) =>
-            LoginResponse.fromJson(response as Map<String, dynamic>));
-
+            LoginResponse.fromJson(response as Map<String, dynamic>),
+        token: true,
+        isIsolate: false);
     return response;
   }
 
@@ -41,7 +42,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final response = await _client.postRequest(APIList.register,
         data: registerParams.toJson(),
         converter: (response) =>
-            RegisterResponse.fromJson(response as Map<String, dynamic>));
+            RegisterResponse.fromJson(response as Map<String, dynamic>),
+        token: true,
+        isIsolate: false);
 
     return response;
   }

@@ -41,7 +41,7 @@ class AuthRepositoryImpl implements AuthRepository {
       }, (loginResponse) {
         _logger.i(
             "Auth Repository Implementation (Login): Returning Login entity(Right)");
-        return Right(loginResponse.toEntity());
+        return Right(loginResponse.toEntity()); // Right now it is
       });
     } else {
       _logger.i(

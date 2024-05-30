@@ -59,7 +59,7 @@ class DioClient {
   Future<Either<Failure, T>> getRequest<T>(String url,
       {Map<String, dynamic>? queryParamaters,
       required ResponseConverter<T> converter,
-      bool isIsolate = true}) async {
+      required bool isIsolate}) async {
     try {
       // Calls get method in dio instance
       final response = await _dio.get(url, queryParameters: queryParamaters);
@@ -94,7 +94,8 @@ class DioClient {
   Future<Either<Failure, T>> postRequest<T>(String url,
       {required Map<String, dynamic> data,
       required ResponseConverter<T> converter,
-      bool isIsolate = true}) async {
+      required bool token,
+      required bool isIsolate}) async {
     try {
       _logger.i("Dio Client: Trying post request");
       _logger.i("Dio Client: ${data.toString()}");
@@ -115,20 +116,43 @@ class DioClient {
             requestOptions: response.requestOptions, response: response);
       }
 
+      // Logging response
+      _logger.i("Dio Client: Response Data = ${response.data}");
+
+      // Logging Authorizaion header. This method works for multiple values
+      // _logger.i(
+      //     "Dio Client: Response Header (Authorization) = ${response.headers["Authorization"]}");
+
+      // Logging Authorization header. This method only works if it is a single value
+
+      // Authorization Token
+      final authorizationHeader = response.headers.value("Authorization");
+      _logger.i(
+          "Dio Client: Response Header (Authorization) = $authorizationHeader");
+
+      // Logging token boolean value
+      _logger.i("Dio Client: token = $token");
+
+      final mapData = Map<String, dynamic>.from(response.data);
+      _logger.i("Dio Client: Type of mapData = ${mapData.runtimeType}");
+      _logger.i("Dio Client: mapData = $mapData");
+      mapData["token"] = authorizationHeader;
+      _logger.i("Dio Client: mapData with token = $mapData");
+
       // Check if isolation is not needed
       if (!isIsolate) {
-        return Right(converter(response.data));
+        _logger.i("Dio Client: Not Isolate");
+        return Right(converter(mapData));
       }
 
       // Create isolate parser instance
-      final isolateParser =
-          IsolateParser<T>(response.data as Map<String, dynamic>, converter);
+      final isolateParser = IsolateParser<T>(mapData, converter);
 
       // Wait for parsing result
       final result = await isolateParser.parseInBackground();
 
       // Post Request Succeeded
-      _logger.i("Dio Client: Post request successful");
+      _logger.i("Dio Client (Isolater Parser): Result = $result");
 
       return Right(result);
     } on DioException catch (e) {
