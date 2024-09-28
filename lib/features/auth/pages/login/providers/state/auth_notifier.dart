@@ -31,15 +31,15 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
 
     // Handle data returning and state
     state = data.fold((l) {
-      _logger.i("Auth Notifier: Failure state");
+      _logger.i("Auth Notifier (Login): Failure state");
       return AuthState.failure(l.toString());
     }, (r) {
-      _logger.i("Auth Notifier: Success state");
-      _logger.i("Auth Notifier: data = ${r.toString()}");
+      _logger.i("Auth Notifier (Login): Success state");
+      _logger.i("Auth Notifier (Login): data = ${r.toString()}");
       return AuthState.success(r.token);
     });
 
-    _logger.i("Auth Notifier: ${state.toString()}");
+    _logger.i("Auth Notifier (Login): ${state.toString()}");
   }
 
   // TODO: Add logout state management function

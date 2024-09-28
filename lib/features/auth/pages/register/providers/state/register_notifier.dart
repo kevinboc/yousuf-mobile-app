@@ -25,20 +25,19 @@ class RegisterNotifier extends AutoDisposeNotifier<RegisterState> {
     // Set state to loading after the login procedure begins
     state = const RegisterState.loading();
 
-    // GET Response from PostLogin's usecase call method (login)
+    // GET Response from PostRegister's usecase call method (login)
     final data = await _postRegister.call(params);
 
     // Handle data returning and state
     state = data.fold((l) {
-      _logger.i("Auth Notifier: Failure state");
+      _logger.i("Auth Notifier (Register): Failure state");
       return RegisterState.failure(l.toString());
     }, (r) {
-      _logger.i("Auth Notifier: Success state");
-      _logger.i("Auth Notifier: ${r.toString()}");
-      return RegisterState.success(r);
-      // TODO: Once registered, the Register entity does not contain a token
+      _logger.i("Auth Notifier (Register): Success state");
+      _logger.i("Auth Notifier (Register): data = ${r.toString()}");
+      return RegisterState.success(r.token);
     });
 
-    _logger.i("Auth Notifier: ${state.toString()}");
+    _logger.i("Auth Notifier (Register): ${state.toString()}");
   }
 }
