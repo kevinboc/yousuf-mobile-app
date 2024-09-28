@@ -111,6 +111,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     );
   }
 
+  // TODO: Need to remove login button from register page
   Widget goToLoginButton() {
     return ElevatedButton(
       onPressed: () => GoRouter.of(context).go('/login'),
