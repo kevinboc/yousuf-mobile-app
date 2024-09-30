@@ -26,7 +26,7 @@ class ChatListPage extends StatelessWidget {
       body: const ChatListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

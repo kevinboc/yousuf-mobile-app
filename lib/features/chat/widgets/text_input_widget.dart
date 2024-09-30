@@ -26,9 +26,9 @@ class TextInputWidget extends ConsumerWidget {
                 OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
             suffixIcon: IconButton(
               onPressed: () {
-                ref
-                    .read(messageListProvider.notifier)
-                    .addMessage(_textController.text, true, 1, 1);
+                // ref
+                //     .read(messageListProvider.notifier)
+                //     .addMessage(_textController.text, true, 1, 1);
                 // ref.read(messageListProvider.notifier).computerResponse();
                 _textController.clear();
               },
