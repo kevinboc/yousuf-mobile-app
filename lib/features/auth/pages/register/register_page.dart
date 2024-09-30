@@ -48,7 +48,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(next.toString())));
         } else if (next is Success) {
-          GoRouter.of(context).go('/');
+          GoRouter.of(context).go('/login');
         }
       }),
     );
@@ -91,7 +91,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           state.maybeMap(
                             loading: (_) => const Center(
                                 child: CircularProgressIndicator()),
-                            orElse: () => registerButton(ref),
+                            orElse: () => Column(
+                              children: [
+                                registerButton(ref),
+                                goToLoginButton()
+                              ],
+                            ),
                           ),
                           goToLoginButton()
                         ])))));
