@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/entities/chat_messages.dart';
@@ -6,7 +8,7 @@ import 'package:yousuf_mobile_app/features/chat/domain/providers/retrieve_chat_m
 import 'package:yousuf_mobile_app/features/chat/domain/usecases/retrieve_chat_messages.dart';
 
 // @freezed
-// class ChatMessagesState with $_ChatMessagesState{
+// class ChatMessagesState with _$ChatMessagesState{
 //   const factory ChatMessagesState({
 //     @Default(true) bool isLoading,
 //     required ChatMessages chatMessages,
@@ -26,25 +28,35 @@ import 'package:yousuf_mobile_app/features/chat/domain/usecases/retrieve_chat_me
 // }
 
 class MessageList extends StateNotifier<List<Message>> {
+  final StateNotifierProviderRef messageListRef;
   @override
-  final ref;
-  MessageList(this.ref) : super([]) {
+  MessageList(this.messageListRef) : super([]) {
     retrieveChatHistory();
   }
+  late final RetrieveChatMessages chatHistoryProvider =
+      messageListRef.watch(retrieveChatMessagesProvider);
+  // late final SendNewMessage newMessageProvider =
+  //     messageListRef.watch(AddMessageProvider);
   Future<void> retrieveChatHistory() async {
-    final RetrieveChatMessages chatHistoryProvider =
-        ref.watch(retrieveChatMessagesProvider);
     final messages = await chatHistoryProvider
         .call(const ChatMessagesParams(chatID: 0, userID: 0));
     messages.fold((l) => null, (r) => state = r.messageList);
   }
 
-  void addMessage(String text, bool fromUser, int chatID, int userID) {
-    state = [
-      ...state,
-      Message(text: text, fromUser: fromUser, time: DateTime.now())
-    ];
-  }
+  // FutureOr<void> addMessage(
+  //     String text, bool fromUser, int chatID, int userID) {
+  //   //TODO: if statement(if post request is success then message gets added to state)
+  //   final response = newMessageProvider();
+  //   response.fold((l) {
+  //     //show error message(unset message stays in textfield?)
+  //   }, (r) {
+  //     //clear controller
+  //     state = [
+  //       ...state,
+  //       Message(text: text, fromUser: fromUser, time: DateTime.now())
+  //     ];
+  //   });
+  // }
 
   List<Message> get messageList => state;
 }

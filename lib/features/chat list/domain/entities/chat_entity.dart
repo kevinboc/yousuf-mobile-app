@@ -1,6 +1,11 @@
-abstract class ChatEntity {
-  int chatID;
-  String title;
-  int userID;
-  ChatEntity({required this.chatID, required this.title, required this.userID});
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'chat_entity.freezed.dart';
+part 'chat_entity.g.dart';
+
+@freezed
+class ChatEntity with _$ChatEntity {
+  const factory ChatEntity(int? chatID, String? title) = _ChatEntity;
+  factory ChatEntity.fromJson(Map<String, dynamic> json) =>
+      _$ChatEntityFromJson(json);
 }

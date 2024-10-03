@@ -15,5 +15,4 @@ class ChatMessages with _$ChatMessages {
 
   factory ChatMessages.fromJson(Map<String, dynamic> json) =>
       _$ChatMessagesFromJson(json);
-  List<Message> get messageList;
 }

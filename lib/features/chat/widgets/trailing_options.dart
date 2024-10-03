@@ -11,7 +11,7 @@ Widget trailingOptions(BuildContext buildContext) {
             PopupMenuItem(
                 child: const Text("Rename Chat"),
                 onTap: () => AlertDialog(
-                      content: TextField(),
+                      content: const TextField(),
                       actions: [
                         TextButton(
                             onPressed: () => Navigator.pop(context),
