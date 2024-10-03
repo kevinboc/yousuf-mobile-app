@@ -1,5 +1,6 @@
 // Packages
 import 'package:dartz/dartz.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
 
 //Project Files
@@ -16,12 +17,17 @@ class AuthRepositoryImpl implements AuthRepository {
   // Network Info
   final NetworkInfo networkInfo;
 
+  // Flutter Secure Storage
+  final FlutterSecureStorage secureStorage =
+      FlutterSecureStorage(); // ignore 'const' suggestion
+
   // Logger for development
   final Logger _logger = Logger();
 
   // AuthRepositoryImpl class constructor
   AuthRepositoryImpl(
-      {required this.remoteDataSource, required this.networkInfo});
+      {required this.remoteDataSource,
+      required this.networkInfo}); // TODO: There would be another paramter: local data source
 
   // Overriding login function
   @override
@@ -32,13 +38,27 @@ class AuthRepositoryImpl implements AuthRepository {
           "Auth Repository Implementation (Login): Connection found (Remote)");
 
       // Getting login response from remote data source
-      final response = await remoteDataSource.login(loginParams);
+      final response = await remoteDataSource
+          .login(loginParams); // First await regarding token
 
       return response.fold((failure) {
         _logger.i(
             "Auth Repository Implementation (Login): Returning Failure(Left)");
         return Left(failure);
-      }, (loginResponse) {
+      }, (loginResponse) async {
+        try {
+          _logger.i("Auth Repository Implementation (Login): Storing token");
+          await storeToken(loginResponse.token, secureStorage);
+
+          _logger.i("Auth Repository Implementation (Login): Reading token");
+          String? token = await secureStorage.read(key: 'login_token');
+          if (token != null) {
+            _logger.i("Auth Repository Implementation (Login): token = $token");
+          }
+        } catch (e) {
+          _logger.i(
+              "Auth Repository Implementation (Login): Token is null, cannot store");
+        }
         _logger.i(
             "Auth Repository Implementation (Login): Returning Login entity(Right)");
         return Right(loginResponse.toEntity()); // Right now it is
@@ -75,5 +95,13 @@ class AuthRepositoryImpl implements AuthRepository {
           .i("Auth Repository Implementation (Register): Connection not found");
       return const Left(ServerFailure("Cannot register without connection"));
     }
+  }
+}
+
+// Method to store the token
+Future<void> storeToken(
+    String? token, FlutterSecureStorage secureStorage) async {
+  if (token != null) {
+    await secureStorage.write(key: 'login_token', value: token);
   }
 }

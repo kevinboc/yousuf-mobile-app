@@ -20,7 +20,7 @@ mixin _$RegisterState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Register? data) success,
+    required TResult Function(String? data) success,
     required TResult Function(String message) failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$RegisterState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(Register? data)? success,
+    TResult? Function(String? data)? success,
     TResult? Function(String message)? failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$RegisterState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Register? data)? success,
+    TResult Function(String? data)? success,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) =>
@@ -126,7 +126,7 @@ class _$InitialImpl implements Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Register? data) success,
+    required TResult Function(String? data) success,
     required TResult Function(String message) failure,
   }) {
     return initial();
@@ -137,7 +137,7 @@ class _$InitialImpl implements Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(Register? data)? success,
+    TResult? Function(String? data)? success,
     TResult? Function(String message)? failure,
   }) {
     return initial?.call();
@@ -148,7 +148,7 @@ class _$InitialImpl implements Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Register? data)? success,
+    TResult Function(String? data)? success,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
@@ -240,7 +240,7 @@ class _$LoadingImpl implements Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Register? data) success,
+    required TResult Function(String? data) success,
     required TResult Function(String message) failure,
   }) {
     return loading();
@@ -251,7 +251,7 @@ class _$LoadingImpl implements Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(Register? data)? success,
+    TResult? Function(String? data)? success,
     TResult? Function(String message)? failure,
   }) {
     return loading?.call();
@@ -262,7 +262,7 @@ class _$LoadingImpl implements Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Register? data)? success,
+    TResult Function(String? data)? success,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
@@ -320,9 +320,7 @@ abstract class _$$SuccessImplCopyWith<$Res> {
           _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
       __$$SuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Register? data});
-
-  $RegisterCopyWith<$Res>? get data;
+  $Res call({String? data});
 }
 
 /// @nodoc
@@ -342,20 +340,8 @@ class __$$SuccessImplCopyWithImpl<$Res>
       freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Register?,
+              as String?,
     ));
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $RegisterCopyWith<$Res>? get data {
-    if (_value.data == null) {
-      return null;
-    }
-
-    return $RegisterCopyWith<$Res>(_value.data!, (value) {
-      return _then(_value.copyWith(data: value));
-    });
   }
 }
 
@@ -365,7 +351,7 @@ class _$SuccessImpl implements Success {
   const _$SuccessImpl(this.data);
 
   @override
-  final Register? data;
+  final String? data;
 
   @override
   String toString() {
@@ -394,7 +380,7 @@ class _$SuccessImpl implements Success {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Register? data) success,
+    required TResult Function(String? data) success,
     required TResult Function(String message) failure,
   }) {
     return success(data);
@@ -405,7 +391,7 @@ class _$SuccessImpl implements Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(Register? data)? success,
+    TResult? Function(String? data)? success,
     TResult? Function(String message)? failure,
   }) {
     return success?.call(data);
@@ -416,7 +402,7 @@ class _$SuccessImpl implements Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Register? data)? success,
+    TResult Function(String? data)? success,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
@@ -465,9 +451,9 @@ class _$SuccessImpl implements Success {
 }
 
 abstract class Success implements RegisterState {
-  const factory Success(final Register? data) = _$SuccessImpl;
+  const factory Success(final String? data) = _$SuccessImpl;
 
-  Register? get data;
+  String? get data;
   @JsonKey(ignore: true)
   _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -539,7 +525,7 @@ class _$FailureImpl implements Failure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Register? data) success,
+    required TResult Function(String? data) success,
     required TResult Function(String message) failure,
   }) {
     return failure(message);
@@ -550,7 +536,7 @@ class _$FailureImpl implements Failure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(Register? data)? success,
+    TResult? Function(String? data)? success,
     TResult? Function(String message)? failure,
   }) {
     return failure?.call(message);
@@ -561,7 +547,7 @@ class _$FailureImpl implements Failure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Register? data)? success,
+    TResult Function(String? data)? success,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
