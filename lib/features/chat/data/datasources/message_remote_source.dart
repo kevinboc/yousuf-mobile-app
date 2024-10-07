@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/entities/message.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/usecases/post_chat_message.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/usecases/retrieve_chat_messages.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class MessageRemoteDataSource {
   Future<Either<Failure, ChatMessages>> getChatMessages(
@@ -15,7 +16,7 @@ abstract class MessageRemoteDataSource {
 class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   final DioClient dio;
   MessageRemoteDataSourceImpl(this.dio);
-
+  FlutterSecureStorage storage = FlutterSecureStorage();
   @override
   Future<Either<Failure, ChatMessages>> getChatMessages(
       ChatMessagesParams params) async {
@@ -23,11 +24,11 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
         queryParamaters: params.toJson(),
         converter: (response) =>
             ChatMessages.fromJson(response as Map<String, dynamic>),
-        isIsolate: true);
+        isIsolate: true,
+        token: await storage.read(key: 'login_token') as String);
     return response;
   }
 
-//TODO: GET AND STORE TOKEN FOR POST REQUEST
   @override
   Future<Either<Failure, Message>> message(MessageParams params) async {
     final response = await dio.postRequest('/chats/<chat_id>/message',
@@ -36,7 +37,8 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
         converter: (response) =>
             Message.fromJson(response as Map<String, dynamic>),
         token: true,
-        isIsolate: false);
+        isIsolate: false,
+        tokenVal: await storage.read(key: 'login_token') as String);
     return response;
   }
 

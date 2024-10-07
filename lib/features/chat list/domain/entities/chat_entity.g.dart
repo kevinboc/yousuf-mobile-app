@@ -8,12 +8,12 @@ part of 'chat_entity.dart';
 
 _$ChatEntityImpl _$$ChatEntityImplFromJson(Map<String, dynamic> json) =>
     _$ChatEntityImpl(
-      json['chatID'] as int?,
+      json['id'] as int?,
       json['title'] as String?,
     );
 
 Map<String, dynamic> _$$ChatEntityImplToJson(_$ChatEntityImpl instance) =>
     <String, dynamic>{
-      'chatID': instance.chatID,
+      'id': instance.id,
       'title': instance.title,
     };

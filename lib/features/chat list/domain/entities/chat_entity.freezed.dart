@@ -20,7 +20,7 @@ ChatEntity _$ChatEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatEntity {
-  int? get chatID => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $ChatEntityCopyWith<$Res> {
           ChatEntity value, $Res Function(ChatEntity) then) =
       _$ChatEntityCopyWithImpl<$Res, ChatEntity>;
   @useResult
-  $Res call({int? chatID, String? title});
+  $Res call({int? id, String? title});
 }
 
 /// @nodoc
@@ -51,13 +51,13 @@ class _$ChatEntityCopyWithImpl<$Res, $Val extends ChatEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? chatID = freezed,
+    Object? id = freezed,
     Object? title = freezed,
   }) {
     return _then(_value.copyWith(
-      chatID: freezed == chatID
-          ? _value.chatID
-          : chatID // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as int?,
       title: freezed == title
           ? _value.title
@@ -75,7 +75,7 @@ abstract class _$$ChatEntityImplCopyWith<$Res>
       __$$ChatEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? chatID, String? title});
+  $Res call({int? id, String? title});
 }
 
 /// @nodoc
@@ -89,13 +89,13 @@ class __$$ChatEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? chatID = freezed,
+    Object? id = freezed,
     Object? title = freezed,
   }) {
     return _then(_$ChatEntityImpl(
-      freezed == chatID
-          ? _value.chatID
-          : chatID // ignore: cast_nullable_to_non_nullable
+      freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as int?,
       freezed == title
           ? _value.title
@@ -108,19 +108,19 @@ class __$$ChatEntityImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ChatEntityImpl implements _ChatEntity {
-  const _$ChatEntityImpl(this.chatID, this.title);
+  const _$ChatEntityImpl(this.id, this.title);
 
   factory _$ChatEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatEntityImplFromJson(json);
 
   @override
-  final int? chatID;
+  final int? id;
   @override
   final String? title;
 
   @override
   String toString() {
-    return 'ChatEntity(chatID: $chatID, title: $title)';
+    return 'ChatEntity(id: $id, title: $title)';
   }
 
   @override
@@ -128,13 +128,13 @@ class _$ChatEntityImpl implements _ChatEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ChatEntityImpl &&
-            (identical(other.chatID, chatID) || other.chatID == chatID) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, chatID, title);
+  int get hashCode => Object.hash(runtimeType, id, title);
 
   @JsonKey(ignore: true)
   @override
@@ -151,14 +151,14 @@ class _$ChatEntityImpl implements _ChatEntity {
 }
 
 abstract class _ChatEntity implements ChatEntity {
-  const factory _ChatEntity(final int? chatID, final String? title) =
+  const factory _ChatEntity(final int? id, final String? title) =
       _$ChatEntityImpl;
 
   factory _ChatEntity.fromJson(Map<String, dynamic> json) =
       _$ChatEntityImpl.fromJson;
 
   @override
-  int? get chatID;
+  int? get id;
   @override
   String? get title;
   @override
