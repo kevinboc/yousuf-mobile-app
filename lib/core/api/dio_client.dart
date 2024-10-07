@@ -58,11 +58,16 @@ class DioClient {
   // GET request function
   Future<Either<Failure, T>> getRequest<T>(String url,
       {Map<String, dynamic>? queryParamaters,
+      String? token,
       required ResponseConverter<T> converter,
       required bool isIsolate}) async {
     try {
       // Calls get method in dio instance
-      final response = await _dio.get(url, queryParameters: queryParamaters);
+      final response = await _dio.get(url,
+          queryParameters: queryParamaters,
+          options: (token != null)
+              ? Options(headers: {'Authorization': 'Bearer $token'})
+              : null);
 
       // Check if response status code is good
       if ((response.statusCode ?? 0) < 200 ||
@@ -95,7 +100,8 @@ class DioClient {
       {required Map<String, dynamic> data,
       required ResponseConverter<T> converter,
       required bool token,
-      required bool isIsolate}) async {
+      required bool isIsolate,
+      String? tokenVal}) async {
     try {
       _logger.i("Dio Client: Trying post request");
       _logger.i("Dio Client: ${data.toString()}");
@@ -104,7 +110,11 @@ class DioClient {
       final formData = FormData.fromMap(data);
 
       // Calls post method in dio instance
-      final response = await _dio.post(url, data: formData);
+      final response = await _dio.post(url,
+          data: formData,
+          options: (tokenVal != null)
+              ? Options(headers: {'Authorization': 'Bearer $tokenVal'})
+              : null);
 
       _logger.i("Dio Client: After calling dio post method");
 

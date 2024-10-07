@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yousuf_mobile_app/features/chat%20list/pages/riverpod/chat_list_provider.dart';
+import 'package:yousuf_mobile_app/features/chat%20list/pages/providers/riverpod/chat_list_provider.dart';
 
 Widget trailingChatOptions(BuildContext buildContext) {
   return PopupMenuButton(

@@ -6,6 +6,7 @@ import 'package:yousuf_mobile_app/features/chat%20list/domain/reopsitory/chat_li
 
 class ChatListRepositoryImpl implements ChatListRepository {
   final ChatListRemoteDataSource remote;
+
   ChatListRepositoryImpl(this.remote);
   @override
   Future<Either<Failure, UserChatList>> getChats() {
