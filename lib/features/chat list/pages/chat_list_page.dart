@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as s;
 import 'package:yousuf_mobile_app/features/chat%20list/widgets/chat_list_view.dart';
 import 'package:yousuf_mobile_app/features/chat/widgets/side_navagation_bar.dart';
 
@@ -25,7 +27,19 @@ class ChatListPage extends StatelessWidget {
       ),
       body: const ChatListView(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          print("pressed");
+          Dio dio = Dio();
+          s.FlutterSecureStorage secureStorage = s.FlutterSecureStorage();
+          final token = await secureStorage.read(key: 'login_token') as String;
+          print(token);
+          dio.post('https://yousuf195.azurewebsites.net/chats',
+              options: Options(
+                headers: {'Authorization': token},
+              ),
+              data: FormData.fromMap({'title': 'chat1'}));
+          print("request done");
+        },
         child: const Icon(Icons.add),
       ),
     );
