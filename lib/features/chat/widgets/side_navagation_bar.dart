@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 Widget menuOptions(BuildContext context) {
@@ -49,6 +50,8 @@ Widget menuOptions(BuildContext context) {
           child: ListTile(
               title: const Text("Logout"),
               onTap: () {
+                FlutterSecureStorage storage = FlutterSecureStorage();
+                storage.delete(key: 'login_token');
                 context.go('/login');
                 Navigator.pop(context);
               }),
