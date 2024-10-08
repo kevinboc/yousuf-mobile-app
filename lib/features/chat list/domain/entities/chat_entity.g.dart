@@ -8,7 +8,7 @@ part of 'chat_entity.dart';
 
 _$ChatEntityImpl _$$ChatEntityImplFromJson(Map<String, dynamic> json) =>
     _$ChatEntityImpl(
-      json['id'] as int?,
+      json['id'] as String?,
       json['title'] as String?,
     );
 

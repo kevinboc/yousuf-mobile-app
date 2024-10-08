@@ -13,17 +13,7 @@ class ChatListNotifier extends AutoDisposeNotifier<ChatListState> {
   ChatListState build() {
     _getUserChatList = ref.watch(getUserChatsProvider);
     state = const ChatListState();
-    //placeholder data
-    List<ChatEntity> clist = [];
-    clist.add(ChatEntity(1, "first chat"));
-    clist.add(ChatEntity(2, "second chat"));
-    state = state.copyWith(
-        chats: UserChatList(userChatList: clist),
-        isLoading: false,
-        state: ChatListConcreteState.loaded,
-        hasData: true,
-        isEmpty: false);
-    //place holder data end
+    loadChatList();
     return state;
   }
 

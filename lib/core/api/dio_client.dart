@@ -66,7 +66,7 @@ class DioClient {
       final response = await _dio.get(url,
           queryParameters: queryParamaters,
           options: (token != null)
-              ? Options(headers: {'Authorization': 'Bearer $token'})
+              ? Options(headers: {'Authorization': token})
               : null);
 
       // Check if response status code is good
@@ -75,7 +75,6 @@ class DioClient {
         throw DioException(
             requestOptions: response.requestOptions, response: response);
       }
-
       // Check if isolation is not needed
       if (!isIsolate) {
         return Right(converter(response.data));
@@ -87,7 +86,6 @@ class DioClient {
 
       // Wait for parsing result
       final result = await isolateParser.parseInBackground();
-
       return Right(result);
     } on DioException catch (e) {
       return Left(ServerFailure(
@@ -113,7 +111,7 @@ class DioClient {
       final response = await _dio.post(url,
           data: formData,
           options: (tokenVal != null)
-              ? Options(headers: {'Authorization': 'Bearer $tokenVal'})
+              ? Options(headers: {'Authorization': tokenVal})
               : null);
 
       _logger.i("Dio Client: After calling dio post method");

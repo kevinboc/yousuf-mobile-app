@@ -20,7 +20,7 @@ ChatEntity _$ChatEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatEntity {
-  int? get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $ChatEntityCopyWith<$Res> {
           ChatEntity value, $Res Function(ChatEntity) then) =
       _$ChatEntityCopyWithImpl<$Res, ChatEntity>;
   @useResult
-  $Res call({int? id, String? title});
+  $Res call({String? id, String? title});
 }
 
 /// @nodoc
@@ -58,7 +58,7 @@ class _$ChatEntityCopyWithImpl<$Res, $Val extends ChatEntity>
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,7 @@ abstract class _$$ChatEntityImplCopyWith<$Res>
       __$$ChatEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String? title});
+  $Res call({String? id, String? title});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$ChatEntityImplCopyWithImpl<$Res>
       freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -114,7 +114,7 @@ class _$ChatEntityImpl implements _ChatEntity {
       _$$ChatEntityImplFromJson(json);
 
   @override
-  final int? id;
+  final String? id;
   @override
   final String? title;
 
@@ -151,14 +151,14 @@ class _$ChatEntityImpl implements _ChatEntity {
 }
 
 abstract class _ChatEntity implements ChatEntity {
-  const factory _ChatEntity(final int? id, final String? title) =
+  const factory _ChatEntity(final String? id, final String? title) =
       _$ChatEntityImpl;
 
   factory _ChatEntity.fromJson(Map<String, dynamic> json) =
       _$ChatEntityImpl.fromJson;
 
   @override
-  int? get id;
+  String? get id;
   @override
   String? get title;
   @override

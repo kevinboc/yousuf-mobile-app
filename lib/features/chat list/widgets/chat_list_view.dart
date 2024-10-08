@@ -11,7 +11,6 @@ class ChatListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(chatListNotifierProvider);
-
     ref.listen(chatListNotifierProvider.select((value) => value),
         //handles side effects like navigating and showing snackbar
         ((previous, next) {
@@ -24,9 +23,8 @@ class ChatListView extends ConsumerWidget {
       }
     }));
     //TODO: ADD DIFFERENT SCREEN FOR WHEN STATE IS INITIAL OR IT IS EMPTY
-    return state.state == ChatListConcreteState.loading
-        ? const CircularProgressIndicator()
-        : ListView.builder(
+    return state.state == ChatListConcreteState.loaded
+        ? ListView.builder(
             itemCount: state.chats.userChatList!.length,
             itemBuilder: (context, index) {
               ChatEntity chatName = state.chats.userChatList!.elementAt(index);
@@ -43,17 +41,21 @@ class ChatListView extends ConsumerWidget {
 
                     context.go('/chat',
                         extra: ChatDetails(
-                            chatID: chatName.id as int,
+                            chatID: chatName.id as String,
                             chatTitle: chatName.title as String));
                   },
                 ),
               );
-            });
+            })
+        : Container(
+            alignment: const Alignment(0, -0.1),
+            child: const CircularProgressIndicator(),
+          );
   }
 }
 
 class ChatDetails {
-  int chatID;
+  String chatID;
   String chatTitle;
   ChatDetails({required this.chatID, required this.chatTitle});
 }
