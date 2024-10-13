@@ -22,31 +22,35 @@ class ChatListView extends ConsumerWidget {
         }
       }
     }));
-    //TODO: ADD DIFFERENT SCREEN FOR WHEN STATE IS INITIAL OR IT IS EMPTY
     return state.state == ChatListConcreteState.loaded
-        ? ListView.builder(
-            itemCount: state.chats.userChatList!.length,
-            itemBuilder: (context, index) {
-              ChatEntity chatName = state.chats.userChatList!.elementAt(index);
-              return Card(
-                child: ListTile(
-                  title: Text(
-                    chatName.title as String,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  trailing: trailingChatOptions(context),
-                  onTap: () {
-                    //navigate to chat
-                    // context.go('/chat',pathParameters:{'id':cList[index].chatID, 'title':chatList[index].title});
+        ? RefreshIndicator(
+            onRefresh: () =>
+                ref.read(chatListNotifierProvider.notifier).loadChatList(),
+            child: ListView.builder(
+                itemCount: state.chats.userChatList!.length,
+                itemBuilder: (context, index) {
+                  ChatEntity chatName =
+                      state.chats.userChatList!.elementAt(index);
+                  return Card(
+                    child: ListTile(
+                      title: Text(
+                        chatName.title as String,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      trailing: trailingChatOptions(context),
+                      onTap: () {
+                        //navigate to chat
+                        // context.go('/chat',pathParameters:{'id':cList[index].chatID, 'title':chatList[index].title});
 
-                    context.go('/chat',
-                        extra: ChatDetails(
-                            chatID: chatName.id as String,
-                            chatTitle: chatName.title as String));
-                  },
-                ),
-              );
-            })
+                        context.go('/chat',
+                            extra: ChatDetails(
+                                chatID: chatName.id as String,
+                                chatTitle: chatName.title as String));
+                      },
+                    ),
+                  );
+                }),
+          )
         : Container(
             alignment: const Alignment(0, -0.1),
             child: const CircularProgressIndicator(),

@@ -11,11 +11,8 @@ class ChatListNotifier extends AutoDisposeNotifier<ChatListState> {
   ChatListState build() {
     _getUserChatList = ref.watch(getUserChatsProvider);
     state = const ChatListState();
+    loadChatList();
     return state;
-  }
-
-  Future<void> onInit() async {
-    await loadChatList();
   }
 
   Future<void> loadChatList() async {

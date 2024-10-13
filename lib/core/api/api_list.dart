@@ -6,4 +6,5 @@ class APIList {
   // API list
   static const String login = "/login";
   static const String register = "/register";
+  static const String chats = "/chats";
 }
