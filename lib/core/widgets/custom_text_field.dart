@@ -23,16 +23,6 @@ class CustomField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label for the TextField
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            title,
-            style: AppStyles.bodyText.copyWith(
-              color: AppColors.secondaryText,
-            ),
-          ),
-        ),
         // TextField with customized decoration
         TextField(
           onChanged: onChanged,
@@ -40,49 +30,49 @@ class CustomField extends StatelessWidget {
           obscureText: isPassword,
           style: AppStyles.bodyText,
           decoration: InputDecoration(
-            hintText: 'Enter your message', // Placeholder text
-            hintStyle: AppStyles.text12PxRegular, // Hint text style
+            hintText: title, // Placeholder text
+            hintStyle: AppStyles.bodyText, // Hint text style
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: error != null
-                    ? AppColors.errorColor
-                    : AppColors.primaryColor,
+                color: error != null ? AppColors.errorColor : Colors.green,
                 width: 2.0,
               ),
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: AppColors.secondaryText,
                 width: 1.0,
               ),
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: AppColors.errorColor,
                 width: 2.0,
               ),
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
+
             focusedErrorBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: AppColors.errorColor,
                 width: 2.0,
               ),
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
           ),
         ),
         // Error message display
-        if (error != null && error!.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              error!,
-              style: AppStyles.text12PxRegularError,
-            ),
-          ),
+        Padding(
+          padding: const EdgeInsets.only(top: 4.0, left: 8.0),
+          child: error != null
+              ? Text(
+                  error!,
+                  style: AppStyles.text12PxRegularError,
+                )
+              : const Text(''),
+        )
       ],
     );
   }

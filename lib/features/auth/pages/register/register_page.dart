@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:yousuf_mobile_app/core/extensions/extensions.dart';
+import 'package:yousuf_mobile_app/core/widgets/widgets.dart';
 
 // Program files
 import '../../auth.dart';
@@ -45,8 +47,23 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       ((previous, next) {
         //show Snackbar on failure
         if (next is Failure) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(next.toString())));
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Register Error'),
+                content: const Text("There was an error. Please try again."),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         } else if (next is Success) {
           GoRouter.of(context).go('/login');
         }
@@ -55,7 +72,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(title: const Text('Login Page')),
+        appBar: AppBar(title: const Text('Sign Up Page')),
         body: SafeArea(
             child: Center(
                 child: Form(
@@ -63,31 +80,68 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          TextF(
-                              customKey: 'First Name',
-                              controller: _firstName,
-                              obscureText: false,
-                              hintText: 'First Name'),
-                          TextF(
-                              customKey: 'Last Name',
-                              controller: _lastName,
-                              obscureText: false,
-                              hintText: 'Last Name'),
-                          TextF(
-                              customKey: 'email',
-                              controller: _email,
-                              hintText: 'Email',
-                              obscureText: false),
-                          TextF(
-                              customKey: 'Password',
-                              controller: _password,
-                              obscureText: true,
-                              hintText: 'Password'),
-                          TextF(
-                              customKey: 'Confirm Password',
-                              controller: _confirmPassword,
-                              obscureText: true,
-                              hintText: 'Confirm Password'),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24.0, bottom: 4.0),
+                              child: CustomField(
+                                title: 'First Name',
+                                controller: _firstName,
+                                error: _validateName(_firstName),
+                                onChanged: (value) {
+                                  setState(
+                                      () {}); // To trigger the error message update
+                                },
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24.0, bottom: 4.0),
+                              child: CustomField(
+                                title: 'Last Name',
+                                controller: _lastName,
+                                error: _validateName(_lastName),
+                                onChanged: (value) {
+                                  setState(
+                                      () {}); // To trigger the error message update
+                                },
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24.0, bottom: 4.0),
+                              child: CustomField(
+                                title: 'Email',
+                                controller: _email,
+                                error: _validateEmail(),
+                                onChanged: (value) {
+                                  setState(
+                                      () {}); // To trigger the error message update
+                                },
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24.0, bottom: 4.0),
+                              child: CustomField(
+                                title: 'Password',
+                                controller: _password,
+                                isPassword: true,
+                                error: _validatePassword(),
+                                onChanged: (value) {
+                                  setState(
+                                      () {}); // To trigger the error message update
+                                },
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24.0, bottom: 4.0),
+                              child: CustomField(
+                                title: 'Confirm Password',
+                                controller: _confirmPassword,
+                                isPassword: true,
+                                error: _validateConfirmPassword(),
+                                onChanged: (value) {
+                                  setState(
+                                      () {}); // To trigger the error message update
+                                },
+                              )),
                           state.maybeMap(
                             loading: (_) => const Center(
                                 child: CircularProgressIndicator()),
@@ -99,6 +153,41 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                           ),
                         ])))));
+  }
+
+  String? _validateName(TextEditingController controller) {
+    final name = controller.text;
+    if (name.isEmpty) return '';
+    if (!name.validateName()) {
+      return 'Name can contain letters and be 2 to 50 characters long.';
+    }
+    return null;
+  }
+
+  String? _validateEmail() {
+    final email = _email.text;
+    if (email.isEmpty) return '';
+    if (!email.validateEmail()) return 'Invalid email format.';
+    return null;
+  }
+
+  String? _validatePassword() {
+    final password = _password.text;
+    if (password.isEmpty) return '';
+    if (!password.validatePassword()) {
+      return 'Password must be at least 8 characters long and contain letters, numbers, and special characters.';
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword() {
+    final confirm = _confirmPassword.text;
+    final pass = _password.text;
+    if (confirm.isEmpty) return '';
+    if (!confirm.validateConfirmPassword(pass)) {
+      return 'Name can contain letters and be 2 to 50 characters long.';
+    }
+    return null;
   }
 
   Widget registerButton(WidgetRef ref) {

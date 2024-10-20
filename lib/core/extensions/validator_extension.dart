@@ -6,4 +6,8 @@ extension ValidatorX on String {
   bool validatePassword() => RegExp(
           r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=[\]{};":\\|,.<>?])(?=\S)(?=.{8,}).*$')
       .hasMatch(this);
+
+  bool validateConfirmPassword(String password) => this == password;
+
+  bool validateName() => RegExp(r'^[a-zA-Z]{2,50}$').hasMatch(this);
 }
