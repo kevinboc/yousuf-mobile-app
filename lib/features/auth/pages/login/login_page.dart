@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:yousuf_mobile_app/core/extensions/extensions.dart';
+import 'package:yousuf_mobile_app/core/widgets/widgets.dart';
 
 // Program files
 import '../../auth.dart';
@@ -42,8 +44,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ((previous, next) {
         //show Snackbar on failure
         if (next is Failure) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(next.toString())));
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Login Error'),
+                content: const Text("There was an error. Please try again."),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         } else if (next is Success) {
           GoRouter.of(context).go('/');
         }
@@ -60,16 +77,32 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          TextF(
-                              customKey: 'email',
-                              controller: _email,
-                              hintText: 'Email',
-                              obscureText: false),
-                          TextF(
-                              customKey: 'Password',
-                              controller: _password,
-                              obscureText: true,
-                              hintText: 'Password'),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24.0, bottom: 4.0),
+                              child: CustomField(
+                                title: 'Email',
+                                controller: _email,
+                                error: _validateEmail(),
+                                onChanged: (value) {
+                                  setState(
+                                      () {}); // To trigger the error message update
+                                },
+                              )),
+                          // Password field
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 24.0, right: 24.0),
+                              child: CustomField(
+                                title: 'Password',
+                                controller: _password,
+                                isPassword: true,
+                                error: _validatePassword(),
+                                onChanged: (value) {
+                                  setState(
+                                      () {}); // To trigger the error message update
+                                },
+                              )),
                           state.maybeMap(
                             loading: (_) => const Center(
                                 child: CircularProgressIndicator()),
@@ -77,6 +110,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           ),
                           goToRegisterButton()
                         ])))));
+  }
+
+  String? _validateEmail() {
+    final email = _email.text;
+    if (email.isEmpty) return '';
+    if (!email.validateEmail()) return 'Invalid email format.';
+    return null;
+  }
+
+  String? _validatePassword() {
+    final password = _password.text;
+    if (password.isEmpty) return '';
+    if (!password.validatePassword()) {
+      return 'Password must be at least 8 characters long and contain letters, numbers, and special characters.';
+    }
+    return null;
   }
 
   Widget loginButton(WidgetRef ref) {
