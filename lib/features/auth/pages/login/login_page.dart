@@ -73,8 +73,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.listen(
       authNotifierProvider.select((value) => value),
       ((previous, next) {
-        // print error message
-        if (next is Failure) {}
         //show Snackbar on failure
         if (next is Failure) {
           _logger.e(next.message);
