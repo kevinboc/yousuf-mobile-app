@@ -1,6 +1,7 @@
 // Packages
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:yousuf_mobile_app/core/core.dart';
 
 // Program Files
 import 'auth_state.dart';
@@ -32,7 +33,10 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
     // Handle data returning and state
     state = data.fold((l) {
       _logger.i("Auth Notifier (Login): Failure state");
-      return AuthState.failure(l.toString());
+
+      final sl = l as ServerFailure;
+
+      return AuthState.failure(sl.message);
     }, (r) {
       _logger.i("Auth Notifier (Login): Success state");
       _logger.i("Auth Notifier (Login): data = ${r.toString()}");
