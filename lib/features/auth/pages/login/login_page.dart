@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:yousuf_mobile_app/core/extensions/extensions.dart';
-import 'package:yousuf_mobile_app/core/widgets/widgets.dart';
 
 // Program files
 import '../../auth.dart';
@@ -23,12 +22,44 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   // Logger for development
   final Logger _logger = Logger();
 
-  // Text Editing Controllers
-  final _email = TextEditingController();
-  final _password = TextEditingController();
+  var _enteredEmail = "";
+  var _enteredPassword = "";
 
   // Global Key
   final _formKey = GlobalKey<FormState>();
+
+  // Form submit handler
+  void _submit() {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+
+    // Use those values to send our auth request
+    ref.read(authNotifierProvider.notifier).login(
+          LoginParams(email: _enteredEmail, password: _enteredPassword),
+        );
+  }
+
+  String? _emailValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your email.";
+    }
+    if (!value.validateEmail()) return 'Invalid email format.';
+    return null;
+  }
+
+  String? _passwordValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your password.";
+    }
+    if (!value.validatePassword()) {
+      return 'Password must be at least 8 characters long and contain letters, numbers, and special characters.';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +75,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ((previous, next) {
         //show Snackbar on failure
         if (next is Failure) {
+          _logger.e(next.message);
+
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Login Error'),
-                content: const Text("There was an error. Please try again."),
-                actions: <Widget>[
+                content: Text(next.message),
+                actions: [
                   TextButton(
                     child: const Text('OK'),
                     onPressed: () {
@@ -68,82 +101,67 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(title: const Text('Login Page')),
-        body: SafeArea(
-            child: Center(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: const Text('Login')),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Card(
+              margin: const EdgeInsets.all(24),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
                 child: Form(
-                    key: _formKey,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 24.0, right: 24.0, bottom: 4.0),
-                              child: CustomField(
-                                title: 'Email',
-                                controller: _email,
-                                error: _validateEmail(),
-                                onChanged: (value) {
-                                  setState(
-                                      () {}); // To trigger the error message update
-                                },
-                              )),
-                          // Password field
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 24.0, right: 24.0),
-                              child: CustomField(
-                                title: 'Password',
-                                controller: _password,
-                                isPassword: true,
-                                error: _validatePassword(),
-                                onChanged: (value) {
-                                  setState(
-                                      () {}); // To trigger the error message update
-                                },
-                              )),
-                          state.maybeMap(
-                            loading: (_) => const Center(
-                                child: CircularProgressIndicator()),
-                            orElse: () => loginButton(ref),
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Email",
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        autocorrect: false,
+                        textCapitalization: TextCapitalization.none,
+                        validator: _emailValidator,
+                        onSaved: (value) => _enteredEmail = value!,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Password",
+                        ),
+                        obscureText: true,
+                        validator: _passwordValidator,
+                        onSaved: (value) => _enteredPassword = value!,
+                      ),
+                      const SizedBox(height: 20),
+                      state.maybeMap(
+                        loading: (_) =>
+                            const Center(child: CircularProgressIndicator()),
+                        orElse: () => ElevatedButton(
+                          onPressed: _submit,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primaryContainer,
                           ),
-                          goToRegisterButton()
-                        ])))));
-  }
-
-  String? _validateEmail() {
-    final email = _email.text;
-    if (email.isEmpty) return '';
-    if (!email.validateEmail()) return 'Invalid email format.';
-    return null;
-  }
-
-  String? _validatePassword() {
-    final password = _password.text;
-    if (password.isEmpty) return '';
-    if (!password.validatePassword()) {
-      return 'Password must be at least 8 characters long and contain letters, numbers, and special characters.';
-    }
-    return null;
-  }
-
-  Widget loginButton(WidgetRef ref) {
-    return ElevatedButton(
-      onPressed: () {
-        // validate email and password
-        ref
-            .read(authNotifierProvider.notifier)
-            .login(LoginParams(email: _email.text, password: _password.text));
-      },
-      child: const Text('Login'),
-    );
-  }
-
-  Widget goToRegisterButton() {
-    return ElevatedButton(
-      onPressed: () => GoRouter.of(context).go('/register'),
-      child: const Text('Register Now'),
+                          child: const Text('Login'),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => GoRouter.of(context).go('/register'),
+                        child: const Text(
+                          "Don't have an account? Register!",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
