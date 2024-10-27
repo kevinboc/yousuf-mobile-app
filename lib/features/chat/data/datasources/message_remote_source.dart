@@ -33,9 +33,6 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
     },
         isIsolate: false,
         token: await storage.read(key: 'login_token') as String);
-    print("response");
-
-    print(response);
     return response;
   }
 
