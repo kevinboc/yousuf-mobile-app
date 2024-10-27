@@ -1,67 +1,63 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:yousuf_mobile_app/features/chat/domain/entities/chat_messages.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/entities/message.dart';
+import 'package:yousuf_mobile_app/features/chat/domain/providers/post_chat_message_provider.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/providers/retrieve_chat_messages_provider.dart';
+import 'package:yousuf_mobile_app/features/chat/domain/usecases/post_chat_message.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/usecases/retrieve_chat_messages.dart';
+import 'package:yousuf_mobile_app/features/chat/pages/riverpod/states/chat_id_provider.dart';
+import 'package:yousuf_mobile_app/features/chat/pages/riverpod/states/chat_screen_state.dart';
 
-// @freezed
-// class ChatMessagesState with _$ChatMessagesState{
-//   const factory ChatMessagesState({
-//     @Default(true) bool isLoading,
-//     required ChatMessages chatMessages,
-//   }) = _ChatMessagesState;
+class ChatScreenNotifier extends AutoDisposeNotifier<ChatScreenState> {
+  late final RetrieveChatMessages _retrieveChatMessages;
+  late final PostChatMessage _postChatMessage;
 
-//   const ChatMessagesState._();
-// }
-
-// class ChatMessagesNotifier extends StateNotifier<ChatMessagesState>{
-//   ChatMessagesNotifier() : super(const ChatMessagesState(chatMessages: ChatMessages()));
-
-//   loadMessages() async {
-//     state = state.copyWith(isLoading: true);
-
-//     final chatMessagesResponse = await retrieveChatMessagesProvider
-//   }
-// }
-
-class MessageList extends StateNotifier<List<Message>> {
-  final StateNotifierProviderRef messageListRef;
   @override
-  MessageList(this.messageListRef) : super([]) {
-    retrieveChatHistory();
-  }
-  late final RetrieveChatMessages chatHistoryProvider =
-      messageListRef.watch(retrieveChatMessagesProvider);
-  // late final SendNewMessage newMessageProvider =
-  //     messageListRef.watch(AddMessageProvider);
-  Future<void> retrieveChatHistory() async {
-    final messages = await chatHistoryProvider
-        .call(const ChatMessagesParams(chatID: 0, userID: 0));
-    messages.fold((l) => null, (r) => state = r.messageList);
+  ChatScreenState build() {
+    _postChatMessage = ref.watch(postChatMessagesProvider);
+    _retrieveChatMessages = ref.watch(retrieveChatMessagesProvider);
+    loadMessageHistory();
+    state = const ChatScreenState();
+    return state;
   }
 
-  // FutureOr<void> addMessage(
-  //     String text, bool fromUser, int chatID, int userID) {
-  //   //TODO: if statement(if post request is success then message gets added to state)
-  //   final response = newMessageProvider();
-  //   response.fold((l) {
-  //     //show error message(unset message stays in textfield?)
-  //   }, (r) {
-  //     //clear controller
-  //     state = [
-  //       ...state,
-  //       Message(text: text, fromUser: fromUser, time: DateTime.now())
-  //     ];
-  //   });
-  // }
+  Future<void> sendMessage(String prompt, String chatID) async {
+    //TODO: ADD USER MESSAGE TO STATE
+    state = state.copyWith(
+        state: ChatScreenConcreteState.waitingForResponse,
+        data: [Message(message: prompt, fromUser: true), ...state.data]);
+    final response = await _postChatMessage
+        .call(MessageParams(prompt: prompt, chatID: chatID));
+    response.fold((l) {
+      state = state.copyWith(
+          state: ChatScreenConcreteState.failure, message: l.toString());
+    }, (success) {
+      state = state.copyWith(
+          data: [success, ...state.data],
+          state: ChatScreenConcreteState.loaded);
+    });
+  }
 
-  List<Message> get messageList => state;
+  Future<void> loadMessageHistory() async {
+    String chatID = await ref.read(chatIDProvider);
+    state = state.copyWith(state: ChatScreenConcreteState.loading);
+    final response =
+        await _retrieveChatMessages.call(ChatMessagesParams(chatID: chatID));
+    response.fold((l) {
+      state = state.copyWith(
+          state: ChatScreenConcreteState.failure, message: l.toString());
+    }, (success) {
+      state = state.copyWith(
+          data: success.messageList,
+          state: ChatScreenConcreteState.loaded,
+          hasData: success.messageList.isNotEmpty,
+          isEmpty: success.messageList.isEmpty);
+    });
+  }
 }
 
-final messageListProvider =
-    StateNotifierProvider<MessageList, List<Message>>((ref) {
-  return MessageList(ref);
+final chatScreenNotifierProvider =
+    NotifierProvider.autoDispose<ChatScreenNotifier, ChatScreenState>(() {
+  return ChatScreenNotifier();
 });

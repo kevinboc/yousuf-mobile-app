@@ -10,7 +10,7 @@ Widget messageItem(Message content) {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: Colors.blue),
-      child: Text(content.text),
+      child: Text(content.message),
     ),
     Text(
       // content.time.toString().substring(10, content.time.toString().length - 1),

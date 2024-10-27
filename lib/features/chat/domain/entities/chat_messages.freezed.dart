@@ -20,10 +20,7 @@ ChatMessages _$ChatMessagesFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatMessages {
-  int? get chatID => throw _privateConstructorUsedError;
   List<Message> get messageList => throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
-  int? get userID => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,8 +34,7 @@ abstract class $ChatMessagesCopyWith<$Res> {
           ChatMessages value, $Res Function(ChatMessages) then) =
       _$ChatMessagesCopyWithImpl<$Res, ChatMessages>;
   @useResult
-  $Res call(
-      {int? chatID, List<Message> messageList, String? title, int? userID});
+  $Res call({List<Message> messageList});
 }
 
 /// @nodoc
@@ -54,28 +50,13 @@ class _$ChatMessagesCopyWithImpl<$Res, $Val extends ChatMessages>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? chatID = freezed,
     Object? messageList = null,
-    Object? title = freezed,
-    Object? userID = freezed,
   }) {
     return _then(_value.copyWith(
-      chatID: freezed == chatID
-          ? _value.chatID
-          : chatID // ignore: cast_nullable_to_non_nullable
-              as int?,
       messageList: null == messageList
           ? _value.messageList
           : messageList // ignore: cast_nullable_to_non_nullable
               as List<Message>,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userID: freezed == userID
-          ? _value.userID
-          : userID // ignore: cast_nullable_to_non_nullable
-              as int?,
     ) as $Val);
   }
 }
@@ -88,8 +69,7 @@ abstract class _$$ChatMessagesImplCopyWith<$Res>
       __$$ChatMessagesImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int? chatID, List<Message> messageList, String? title, int? userID});
+  $Res call({List<Message> messageList});
 }
 
 /// @nodoc
@@ -103,28 +83,13 @@ class __$$ChatMessagesImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? chatID = freezed,
     Object? messageList = null,
-    Object? title = freezed,
-    Object? userID = freezed,
   }) {
     return _then(_$ChatMessagesImpl(
-      chatID: freezed == chatID
-          ? _value.chatID
-          : chatID // ignore: cast_nullable_to_non_nullable
-              as int?,
       messageList: null == messageList
           ? _value._messageList
           : messageList // ignore: cast_nullable_to_non_nullable
               as List<Message>,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userID: freezed == userID
-          ? _value.userID
-          : userID // ignore: cast_nullable_to_non_nullable
-              as int?,
     ));
   }
 }
@@ -132,18 +97,12 @@ class __$$ChatMessagesImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ChatMessagesImpl implements _ChatMessages {
-  const _$ChatMessagesImpl(
-      {this.chatID,
-      final List<Message> messageList = const [],
-      this.title,
-      this.userID})
+  const _$ChatMessagesImpl({final List<Message> messageList = const []})
       : _messageList = messageList;
 
   factory _$ChatMessagesImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatMessagesImplFromJson(json);
 
-  @override
-  final int? chatID;
   final List<Message> _messageList;
   @override
   @JsonKey()
@@ -154,13 +113,8 @@ class _$ChatMessagesImpl implements _ChatMessages {
   }
 
   @override
-  final String? title;
-  @override
-  final int? userID;
-
-  @override
   String toString() {
-    return 'ChatMessages(chatID: $chatID, messageList: $messageList, title: $title, userID: $userID)';
+    return 'ChatMessages(messageList: $messageList)';
   }
 
   @override
@@ -168,17 +122,14 @@ class _$ChatMessagesImpl implements _ChatMessages {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ChatMessagesImpl &&
-            (identical(other.chatID, chatID) || other.chatID == chatID) &&
             const DeepCollectionEquality()
-                .equals(other._messageList, _messageList) &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.userID, userID) || other.userID == userID));
+                .equals(other._messageList, _messageList));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, chatID,
-      const DeepCollectionEquality().hash(_messageList), title, userID);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_messageList));
 
   @JsonKey(ignore: true)
   @override
@@ -195,23 +146,14 @@ class _$ChatMessagesImpl implements _ChatMessages {
 }
 
 abstract class _ChatMessages implements ChatMessages {
-  const factory _ChatMessages(
-      {final int? chatID,
-      final List<Message> messageList,
-      final String? title,
-      final int? userID}) = _$ChatMessagesImpl;
+  const factory _ChatMessages({final List<Message> messageList}) =
+      _$ChatMessagesImpl;
 
   factory _ChatMessages.fromJson(Map<String, dynamic> json) =
       _$ChatMessagesImpl.fromJson;
 
   @override
-  int? get chatID;
-  @override
   List<Message> get messageList;
-  @override
-  String? get title;
-  @override
-  int? get userID;
   @override
   @JsonKey(ignore: true)
   _$$ChatMessagesImplCopyWith<_$ChatMessagesImpl> get copyWith =>

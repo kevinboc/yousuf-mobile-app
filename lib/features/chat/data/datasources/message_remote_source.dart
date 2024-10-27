@@ -10,7 +10,6 @@ abstract class MessageRemoteDataSource {
   Future<Either<Failure, ChatMessages>> getChatMessages(
       ChatMessagesParams messageListParams);
   Future<Either<Failure, Message>> message(MessageParams messageParams);
-  // Future<Either<Failure, Message>> newChat(NewChatParams newChatParams);
 }
 
 class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
@@ -20,20 +19,31 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   @override
   Future<Either<Failure, ChatMessages>> getChatMessages(
       ChatMessagesParams params) async {
-    final response = await dio.getRequest("",
-        queryParamaters: params.toJson(),
-        converter: (response) =>
-            ChatMessages.fromJson(response as Map<String, dynamic>),
-        isIsolate: true,
+    final response = await dio.getRequest("/chats/${params.chatID}",
+        converter: (response) {
+      List<Message> messageList = [];
+      for (final i in response) {
+        // String id = i['id'];
+        // String session_id = i['session_id'];
+        String type = i['history']['type'];
+        String content = i['history']['data']['content'];
+        messageList.add(Message(message: content, fromUser: type == 'human'));
+      }
+      return ChatMessages(messageList: messageList);
+    },
+        isIsolate: false,
         token: await storage.read(key: 'login_token') as String);
+    print("response");
+
+    print(response);
     return response;
   }
 
   @override
   Future<Either<Failure, Message>> message(MessageParams params) async {
-    final response = await dio.postRequest('/chats/<chat_id>/message',
+    final response = await dio.postRequest('/chats/${params.chatID}/message',
         //pass in prompt as form
-        data: params.toJson(),
+        data: {'prompt': params.prompt},
         converter: (response) =>
             Message.fromJson(response as Map<String, dynamic>),
         token: true,
@@ -41,25 +51,4 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
         tokenVal: await storage.read(key: 'login_token') as String);
     return response;
   }
-
-  // @override
-  // Future<Either<Failure, Message>> newChat(NewChatParams newChatParams) async{
-  //   final response = await dio.postRequest("url",
-  //       data: newChatParams.toJson(),
-  //       converter: (response) =>
-  //           Message.fromJson(response as Map<String, dynamic>));
-  //   return response;
-  // }
 }
-
-// class NewChatParams {
-//   final String userEmail;
-//   final int aiID;
-//   final String messageContent;
-//   const NewChatParams(
-//       {required this.userEmail,
-//       required this.aiID,
-//       required this.messageContent});
-//   Map<String, dynamic> toJson() =>
-//       {"userEmail": userEmail, "aiID": aiID, "messageContent": messageContent};
-// }

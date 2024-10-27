@@ -11,6 +11,7 @@ class ChatPage extends StatelessWidget {
   final ChatDetails chatDetails;
   @override
   Widget build(BuildContext context) {
+    String chatID = chatDetails.chatID;
     return Scaffold(
         drawer: Drawer(child: menuOptions(context)),
         appBar: AppBar(
@@ -18,8 +19,8 @@ class ChatPage extends StatelessWidget {
           actions: [trailingOptions(context)],
         ),
         body: Column(children: [
-          const Expanded(child: MessageListView()),
-          TextInputWidget(),
+          Expanded(child: MessageListView(chatID: chatDetails.chatID)),
+          TextInputWidget(chatID),
         ]));
   }
 }
