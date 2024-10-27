@@ -8,14 +8,12 @@ part of 'post_chat_message.dart';
 
 _$MessageParamsImpl _$$MessageParamsImplFromJson(Map<String, dynamic> json) =>
     _$MessageParamsImpl(
-      messageContent: json['messageContent'] as String,
-      chatID: json['chatID'] as int,
-      userID: json['userID'] as int,
+      prompt: json['prompt'] as String,
+      chatID: json['chatID'] as String,
     );
 
 Map<String, dynamic> _$$MessageParamsImplToJson(_$MessageParamsImpl instance) =>
     <String, dynamic>{
-      'messageContent': instance.messageContent,
+      'prompt': instance.prompt,
       'chatID': instance.chatID,
-      'userID': instance.userID,
     };

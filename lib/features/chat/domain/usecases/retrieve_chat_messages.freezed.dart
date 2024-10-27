@@ -20,8 +20,9 @@ ChatMessagesParams _$ChatMessagesParamsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatMessagesParams {
-  int get chatID => throw _privateConstructorUsedError;
-  int get userID => throw _privateConstructorUsedError;
+  String get chatID => throw _privateConstructorUsedError;
+  int get offset => throw _privateConstructorUsedError;
+  int get limit => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $ChatMessagesParamsCopyWith<$Res> {
           ChatMessagesParams value, $Res Function(ChatMessagesParams) then) =
       _$ChatMessagesParamsCopyWithImpl<$Res, ChatMessagesParams>;
   @useResult
-  $Res call({int chatID, int userID});
+  $Res call({String chatID, int offset, int limit});
 }
 
 /// @nodoc
@@ -52,16 +53,21 @@ class _$ChatMessagesParamsCopyWithImpl<$Res, $Val extends ChatMessagesParams>
   @override
   $Res call({
     Object? chatID = null,
-    Object? userID = null,
+    Object? offset = null,
+    Object? limit = null,
   }) {
     return _then(_value.copyWith(
       chatID: null == chatID
           ? _value.chatID
           : chatID // ignore: cast_nullable_to_non_nullable
+              as String,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
               as int,
-      userID: null == userID
-          ? _value.userID
-          : userID // ignore: cast_nullable_to_non_nullable
+      limit: null == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -75,7 +81,7 @@ abstract class _$$ChatMessageParamsImplCopyWith<$Res>
       __$$ChatMessageParamsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int chatID, int userID});
+  $Res call({String chatID, int offset, int limit});
 }
 
 /// @nodoc
@@ -90,16 +96,21 @@ class __$$ChatMessageParamsImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? chatID = null,
-    Object? userID = null,
+    Object? offset = null,
+    Object? limit = null,
   }) {
     return _then(_$ChatMessageParamsImpl(
       chatID: null == chatID
           ? _value.chatID
           : chatID // ignore: cast_nullable_to_non_nullable
+              as String,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
               as int,
-      userID: null == userID
-          ? _value.userID
-          : userID // ignore: cast_nullable_to_non_nullable
+      limit: null == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -108,19 +119,24 @@ class __$$ChatMessageParamsImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ChatMessageParamsImpl implements _ChatMessageParams {
-  const _$ChatMessageParamsImpl({required this.chatID, required this.userID});
+  const _$ChatMessageParamsImpl(
+      {required this.chatID, this.offset = 0, this.limit = 16});
 
   factory _$ChatMessageParamsImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatMessageParamsImplFromJson(json);
 
   @override
-  final int chatID;
+  final String chatID;
   @override
-  final int userID;
+  @JsonKey()
+  final int offset;
+  @override
+  @JsonKey()
+  final int limit;
 
   @override
   String toString() {
-    return 'ChatMessagesParams(chatID: $chatID, userID: $userID)';
+    return 'ChatMessagesParams(chatID: $chatID, offset: $offset, limit: $limit)';
   }
 
   @override
@@ -129,12 +145,13 @@ class _$ChatMessageParamsImpl implements _ChatMessageParams {
         (other.runtimeType == runtimeType &&
             other is _$ChatMessageParamsImpl &&
             (identical(other.chatID, chatID) || other.chatID == chatID) &&
-            (identical(other.userID, userID) || other.userID == userID));
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.limit, limit) || other.limit == limit));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, chatID, userID);
+  int get hashCode => Object.hash(runtimeType, chatID, offset, limit);
 
   @JsonKey(ignore: true)
   @override
@@ -153,16 +170,19 @@ class _$ChatMessageParamsImpl implements _ChatMessageParams {
 
 abstract class _ChatMessageParams implements ChatMessagesParams {
   const factory _ChatMessageParams(
-      {required final int chatID,
-      required final int userID}) = _$ChatMessageParamsImpl;
+      {required final String chatID,
+      final int offset,
+      final int limit}) = _$ChatMessageParamsImpl;
 
   factory _ChatMessageParams.fromJson(Map<String, dynamic> json) =
       _$ChatMessageParamsImpl.fromJson;
 
   @override
-  int get chatID;
+  String get chatID;
   @override
-  int get userID;
+  int get offset;
+  @override
+  int get limit;
   @override
   @JsonKey(ignore: true)
   _$$ChatMessageParamsImplCopyWith<_$ChatMessageParamsImpl> get copyWith =>

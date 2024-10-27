@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yousuf_mobile_app/features/chat/pages/riverpod/message_list_provider.dart';
 
 class TextInputWidget extends ConsumerWidget {
-  TextInputWidget({super.key});
+  TextInputWidget(this.chatID, {super.key});
+  final String chatID;
   final TextEditingController _textController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,11 +26,10 @@ class TextInputWidget extends ConsumerWidget {
             focusedBorder:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
             suffixIcon: IconButton(
-              onPressed: () {
-                // ref
-                //     .read(messageListProvider.notifier)
-                //     .addMessage(_textController.text, true, 1, 1);
-                // ref.read(messageListProvider.notifier).computerResponse();
+              onPressed: () async {
+                ref
+                    .read(chatScreenNotifierProvider.notifier)
+                    .sendMessage(_textController.text, chatID);
                 _textController.clear();
               },
               icon: const Icon(Icons.arrow_upward),

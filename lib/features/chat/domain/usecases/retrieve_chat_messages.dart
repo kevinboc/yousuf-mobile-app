@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:yousuf_mobile_app/core/core.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/entities/chat_messages.dart';
+import 'package:yousuf_mobile_app/features/chat/domain/entities/message.dart';
 import 'package:yousuf_mobile_app/features/chat/domain/repository/message_repository.dart';
 
 part 'retrieve_chat_messages.freezed.dart';
@@ -20,8 +21,10 @@ class RetrieveChatMessages extends UseCase<ChatMessages, ChatMessagesParams> {
 
 @freezed
 class ChatMessagesParams with _$ChatMessagesParams {
-  const factory ChatMessagesParams({required int chatID, required int userID}) =
-      _ChatMessageParams;
+  const factory ChatMessagesParams(
+      {required String chatID,
+      @Default(0) int offset,
+      @Default(16) int limit}) = _ChatMessageParams;
   factory ChatMessagesParams.fromJson(Map<String, dynamic> json) =>
       _$ChatMessagesParamsFromJson(json);
 }

@@ -7,11 +7,8 @@ part 'chat_messages.g.dart';
 
 @freezed
 class ChatMessages with _$ChatMessages {
-  const factory ChatMessages(
-      {int? chatID,
-      @Default([]) List<Message> messageList,
-      String? title,
-      int? userID}) = _ChatMessages;
+  const factory ChatMessages({@Default([]) List<Message> messageList}) =
+      _ChatMessages;
 
   factory ChatMessages.fromJson(Map<String, dynamic> json) =>
       _$ChatMessagesFromJson(json);

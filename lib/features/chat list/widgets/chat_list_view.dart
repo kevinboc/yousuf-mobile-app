@@ -5,6 +5,7 @@ import 'package:yousuf_mobile_app/features/chat%20list/domain/entities/chat_enti
 import 'package:yousuf_mobile_app/features/chat%20list/pages/providers/riverpod/chat_list_provider.dart';
 import 'package:yousuf_mobile_app/features/chat%20list/pages/providers/riverpod/states/chat_list_state.dart';
 import 'package:yousuf_mobile_app/features/chat%20list/widgets/chat_trailing_options.dart';
+import 'package:yousuf_mobile_app/features/chat/pages/riverpod/states/chat_id_provider.dart';
 
 class ChatListView extends ConsumerWidget {
   const ChatListView({super.key});
@@ -41,7 +42,9 @@ class ChatListView extends ConsumerWidget {
                       onTap: () {
                         //navigate to chat
                         // context.go('/chat',pathParameters:{'id':cList[index].chatID, 'title':chatList[index].title});
-
+                        ref
+                            .read(chatIDProvider.notifier)
+                            .updateCID(chatName.id as String);
                         context.go('/chat',
                             extra: ChatDetails(
                                 chatID: chatName.id as String,

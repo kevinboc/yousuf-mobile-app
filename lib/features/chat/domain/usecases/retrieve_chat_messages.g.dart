@@ -9,13 +9,15 @@ part of 'retrieve_chat_messages.dart';
 _$ChatMessageParamsImpl _$$ChatMessageParamsImplFromJson(
         Map<String, dynamic> json) =>
     _$ChatMessageParamsImpl(
-      chatID: json['chatID'] as int,
-      userID: json['userID'] as int,
+      chatID: json['chatID'] as String,
+      offset: json['offset'] as int? ?? 0,
+      limit: json['limit'] as int? ?? 16,
     );
 
 Map<String, dynamic> _$$ChatMessageParamsImplToJson(
         _$ChatMessageParamsImpl instance) =>
     <String, dynamic>{
       'chatID': instance.chatID,
-      'userID': instance.userID,
+      'offset': instance.offset,
+      'limit': instance.limit,
     };

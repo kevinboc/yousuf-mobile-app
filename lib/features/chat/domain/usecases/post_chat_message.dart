@@ -24,9 +24,7 @@ class PostChatMessage extends UseCase<Message, MessageParams> {
 @freezed
 class MessageParams with _$MessageParams {
   const factory MessageParams(
-      {required String messageContent,
-      required int chatID,
-      required int userID}) = _MessageParams;
+      {required String prompt, required String chatID}) = _MessageParams;
 
   factory MessageParams.fromJson(Map<String, dynamic> json) =>
       _$MessageParamsFromJson(json);

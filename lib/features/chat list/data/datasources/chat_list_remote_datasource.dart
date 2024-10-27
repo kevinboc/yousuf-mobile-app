@@ -23,11 +23,21 @@ class ChatListRemoteDataSourceImpl implements ChatListRemoteDataSource {
       APIList.chats,
       token: token,
       converter: (response) {
-        final List<ChatEntity> chatEntities = [];
-        for (final i in response) {
-          chatEntities.add(ChatEntity(i['id'], i['title']));
-        }
-        return UserChatList(userChatList: chatEntities);
+        /*
+         * response.data is passed in from dio as response
+         * response is a list of chats with [{id: 6705debd, user_id: 341adkjas, title: chattitleex }]
+         * response is of type list<dynamic>
+         * response.map<ChatEntity> takes every object and calls fromJson on it
+         * returning Iterable<ChatEntity>
+         * to list turns in into a list as it is what UserChatList expects
+         * maybe get rid of UserChatList and just leave as List<ChatEntity>
+        */
+
+        // return UserChatList(
+        //     userChatList: response
+        //         .map<ChatEntity>((json) => ChatEntity.fromJson(json))
+        //         .toList());
+        return UserChatList.fromJson({'userChatList': response});
       },
       isIsolate: false,
     );

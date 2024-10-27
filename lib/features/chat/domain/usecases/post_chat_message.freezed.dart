@@ -20,9 +20,8 @@ MessageParams _$MessageParamsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MessageParams {
-  String get messageContent => throw _privateConstructorUsedError;
-  int get chatID => throw _privateConstructorUsedError;
-  int get userID => throw _privateConstructorUsedError;
+  String get prompt => throw _privateConstructorUsedError;
+  String get chatID => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +35,7 @@ abstract class $MessageParamsCopyWith<$Res> {
           MessageParams value, $Res Function(MessageParams) then) =
       _$MessageParamsCopyWithImpl<$Res, MessageParams>;
   @useResult
-  $Res call({String messageContent, int chatID, int userID});
+  $Res call({String prompt, String chatID});
 }
 
 /// @nodoc
@@ -52,23 +51,18 @@ class _$MessageParamsCopyWithImpl<$Res, $Val extends MessageParams>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? messageContent = null,
+    Object? prompt = null,
     Object? chatID = null,
-    Object? userID = null,
   }) {
     return _then(_value.copyWith(
-      messageContent: null == messageContent
-          ? _value.messageContent
-          : messageContent // ignore: cast_nullable_to_non_nullable
+      prompt: null == prompt
+          ? _value.prompt
+          : prompt // ignore: cast_nullable_to_non_nullable
               as String,
       chatID: null == chatID
           ? _value.chatID
           : chatID // ignore: cast_nullable_to_non_nullable
-              as int,
-      userID: null == userID
-          ? _value.userID
-          : userID // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
     ) as $Val);
   }
 }
@@ -81,7 +75,7 @@ abstract class _$$MessageParamsImplCopyWith<$Res>
       __$$MessageParamsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String messageContent, int chatID, int userID});
+  $Res call({String prompt, String chatID});
 }
 
 /// @nodoc
@@ -95,23 +89,18 @@ class __$$MessageParamsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? messageContent = null,
+    Object? prompt = null,
     Object? chatID = null,
-    Object? userID = null,
   }) {
     return _then(_$MessageParamsImpl(
-      messageContent: null == messageContent
-          ? _value.messageContent
-          : messageContent // ignore: cast_nullable_to_non_nullable
+      prompt: null == prompt
+          ? _value.prompt
+          : prompt // ignore: cast_nullable_to_non_nullable
               as String,
       chatID: null == chatID
           ? _value.chatID
           : chatID // ignore: cast_nullable_to_non_nullable
-              as int,
-      userID: null == userID
-          ? _value.userID
-          : userID // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
     ));
   }
 }
@@ -119,24 +108,19 @@ class __$$MessageParamsImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MessageParamsImpl implements _MessageParams {
-  const _$MessageParamsImpl(
-      {required this.messageContent,
-      required this.chatID,
-      required this.userID});
+  const _$MessageParamsImpl({required this.prompt, required this.chatID});
 
   factory _$MessageParamsImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageParamsImplFromJson(json);
 
   @override
-  final String messageContent;
+  final String prompt;
   @override
-  final int chatID;
-  @override
-  final int userID;
+  final String chatID;
 
   @override
   String toString() {
-    return 'MessageParams(messageContent: $messageContent, chatID: $chatID, userID: $userID)';
+    return 'MessageParams(prompt: $prompt, chatID: $chatID)';
   }
 
   @override
@@ -144,15 +128,13 @@ class _$MessageParamsImpl implements _MessageParams {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MessageParamsImpl &&
-            (identical(other.messageContent, messageContent) ||
-                other.messageContent == messageContent) &&
-            (identical(other.chatID, chatID) || other.chatID == chatID) &&
-            (identical(other.userID, userID) || other.userID == userID));
+            (identical(other.prompt, prompt) || other.prompt == prompt) &&
+            (identical(other.chatID, chatID) || other.chatID == chatID));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, messageContent, chatID, userID);
+  int get hashCode => Object.hash(runtimeType, prompt, chatID);
 
   @JsonKey(ignore: true)
   @override
@@ -170,19 +152,16 @@ class _$MessageParamsImpl implements _MessageParams {
 
 abstract class _MessageParams implements MessageParams {
   const factory _MessageParams(
-      {required final String messageContent,
-      required final int chatID,
-      required final int userID}) = _$MessageParamsImpl;
+      {required final String prompt,
+      required final String chatID}) = _$MessageParamsImpl;
 
   factory _MessageParams.fromJson(Map<String, dynamic> json) =
       _$MessageParamsImpl.fromJson;
 
   @override
-  String get messageContent;
+  String get prompt;
   @override
-  int get chatID;
-  @override
-  int get userID;
+  String get chatID;
   @override
   @JsonKey(ignore: true)
   _$$MessageParamsImplCopyWith<_$MessageParamsImpl> get copyWith =>
