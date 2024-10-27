@@ -108,7 +108,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Register Error'),
-                content: const Text("There was an error. Please try again."),
+                content: Text(next.message),
                 actions: [
                   TextButton(
                     child: const Text('OK'),

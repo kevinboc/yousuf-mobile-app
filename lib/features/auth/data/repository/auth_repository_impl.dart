@@ -42,9 +42,16 @@ class AuthRepositoryImpl implements AuthRepository {
           .login(loginParams); // First await regarding token
 
       return response.fold((failure) {
+        final sf = failure as ServerFailure;
+
+        var errorMsg = "Something went wrong! Please try again later.";
+        if (sf.statusCode == 401 || sf.statusCode == 404) {
+          errorMsg = "Invalid email or password.";
+        }
+
         _logger.i(
             "Auth Repository Implementation (Login): Returning Failure(Left)");
-        return Left(failure);
+        return Left(ServerFailure(errorMsg, statusCode: sf.statusCode));
       }, (loginResponse) async {
         try {
           _logger.i("Auth Repository Implementation (Login): Storing token");
@@ -82,9 +89,15 @@ class AuthRepositoryImpl implements AuthRepository {
       final response = await remoteDataSource.register(registerParams);
 
       return response.fold((failure) {
+        final sf = failure as ServerFailure;
+
+        var errorMsg = "Something went wrong! Please try again later.";
+
+        // TODO: Implement error messages for different status codes
+
         _logger.i(
             "Auth Repository Implementation (Register): Returning Failure(Left)");
-        return Left(failure);
+        return Left(ServerFailure(errorMsg, statusCode: sf.statusCode));
       }, (registerResponse) {
         _logger.i(
             "Auth Repository Implementation (Register): Returning Register entity(Right)");

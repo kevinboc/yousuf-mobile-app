@@ -167,12 +167,13 @@ class DioClient {
       _logger.i("Dio Client: Request URL = ${e.requestOptions.uri}");
       _logger.i("Dio Client: ServerFailure");
 
-      var errorMsg = "Something went wrong! Please try again later.";
-
       // Update error message according to status code
       var statusCode = e.response?.statusCode;
-      if (statusCode == 401 || statusCode == 404) {
-        errorMsg = "Invalid email or password.";
+
+      const errorMsg = "Server Failure";
+
+      if (statusCode != null) {
+        return Left(ServerFailure(errorMsg, statusCode: statusCode));
       }
 
       return Left(ServerFailure(errorMsg));

@@ -75,8 +75,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ((previous, next) {
         //show Snackbar on failure
         if (next is Failure) {
-          _logger.e(next.message);
-
           showDialog(
             context: context,
             builder: (BuildContext context) {
