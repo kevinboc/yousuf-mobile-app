@@ -1,6 +1,7 @@
 // Packages
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:yousuf_mobile_app/core/core.dart';
 
 // Program Files
 import 'register_state.dart';
@@ -31,7 +32,10 @@ class RegisterNotifier extends AutoDisposeNotifier<RegisterState> {
     // Handle data returning and state
     state = data.fold((l) {
       _logger.i("Auth Notifier (Register): Failure state");
-      return RegisterState.failure(l.toString());
+
+      final sl = l as ServerFailure;
+
+      return RegisterState.failure(sl.message);
     }, (r) {
       _logger.i("Auth Notifier (Register): Success state");
       _logger.i("Auth Notifier (Register): data = ${r.toString()}");
