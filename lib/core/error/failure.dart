@@ -5,8 +5,9 @@ abstract class Failure {
 
 class ServerFailure extends Failure {
   final String message;
+  final int statusCode;
 
-  const ServerFailure(this.message);
+  const ServerFailure(this.message, {this.statusCode = 500});
 
   @override
   bool operator ==(Object other) =>
