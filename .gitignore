@@ -88,7 +88,7 @@ app.*.map.json
 *.jks
 
 # macOS
-**/Flutter/ephemeral/
+# **/Flutter/ephemeral/
 **/Pods/
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
@@ -99,6 +99,8 @@ app.*.map.json
 **/windows/flutter/generated_plugin_registrant.cc
 **/windows/flutter/generated_plugin_registrant.h
 **/windows/flutter/generated_plugins.cmake
+/windows/generated_plugin.cmake
+/windows/flutter/generated_plugin_registrant.*
 
 # Linux
 **/linux/flutter/ephemeral/
