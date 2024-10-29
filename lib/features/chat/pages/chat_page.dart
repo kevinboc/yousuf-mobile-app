@@ -6,9 +6,9 @@ import 'package:yousuf_mobile_app/features/chat/widgets/text_input_widget.dart';
 import 'package:yousuf_mobile_app/features/chat/widgets/trailing_options.dart';
 
 class ChatPage extends StatelessWidget {
-  //this gets passed chatid, title, userid(or from riverpod)?(for requests)
   const ChatPage(this.chatDetails, {super.key});
   final ChatDetails chatDetails;
+
   @override
   Widget build(BuildContext context) {
     String chatID = chatDetails.chatID;
@@ -16,7 +16,7 @@ class ChatPage extends StatelessWidget {
         drawer: Drawer(child: menuOptions(context)),
         appBar: AppBar(
           title: Text(chatDetails.chatTitle),
-          actions: [trailingOptions(context)],
+          actions: [trailingOptions(context, chatDetails.chatID)],
         ),
         body: Column(children: [
           Expanded(child: MessageListView(chatID: chatDetails.chatID)),
