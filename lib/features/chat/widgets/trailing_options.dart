@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-Widget trailingOptions(BuildContext buildContext) {
-  //TODO: take in ai ID/other identification so user can navigate to ai page
+Widget trailingOptions(BuildContext buildContext, String chatID) {
   return PopupMenuButton(
       itemBuilder: (context) => [
             PopupMenuItem(
-                child: const Text("View AI"),
-                onTap: () => buildContext.go("/ai")),
+                child: const Text("Upload File"),
+                onTap: () => buildContext.go("/chat/upload")),
             PopupMenuItem(
                 child: const Text("Rename Chat"),
                 onTap: () => AlertDialog(

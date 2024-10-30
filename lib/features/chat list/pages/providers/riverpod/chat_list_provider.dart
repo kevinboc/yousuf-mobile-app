@@ -35,11 +35,6 @@ class ChatListNotifier extends AutoDisposeNotifier<ChatListState> {
   }
 }
 
-// final chatListNotifierProvider =
-//     AutoDisposeStateNotifierProvider<ChatListNotifier, ChatListState>((ref) {
-//   return ChatListNotifier(chatListProvider: ref.watch(getUserChatsProvider));
-// });
-
 final chatListNotifierProvider =
     NotifierProvider.autoDispose<ChatListNotifier, ChatListState>(() {
   return ChatListNotifier();

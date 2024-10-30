@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yousuf_mobile_app/features/chat%20list/domain/entities/chat_entity.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yousuf_mobile_app/features/chat%20list/domain/providers/create_new_chat_provider.dart';
 import 'package:yousuf_mobile_app/features/chat%20list/domain/usecases/make_new_chat.dart';
+import 'package:yousuf_mobile_app/features/chat%20list/widgets/chat_list_view.dart';
 
 Future createNewChat(BuildContext context) {
   TextEditingController _controller = TextEditingController();
@@ -21,12 +22,20 @@ Future createNewChat(BuildContext context) {
                       onPressed: () => Navigator.pop(context),
                       child: const Text("Cancel")),
                   TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         String chatName = _controller.text;
-                        ref
+                        final response = await ref
                             .read(createNewChatProvider)
                             .call(CreateNewChatParams(chatName: chatName));
-                        Navigator.pop(context);
+                        response.fold(
+                            //TODO: ADD FAILUR wE MESSAGE FOR CREATING NEW CHAT
+                            (l) => null,
+                            (success) => {
+                                  context.go('/chat',
+                                      extra: ChatDetails(
+                                          chatID: success.id as String,
+                                          chatTitle: success.title as String))
+                                });
                       },
                       child: const Text("Create"))
                 ],
@@ -34,15 +43,3 @@ Future createNewChat(BuildContext context) {
             },
           ));
 }
-
-            // print("pressed");
-            // Dio dio = Dio();
-            // s.FlutterSecureStorage secureStorage = s.FlutterSecureStorage();
-            // final token = await secureStorage.read(key: 'login_token') as String;
-            // print(token);
-            // dio.post('https://yousuf195.azurewebsites.net/chats',
-            //     options: Options(
-            //       headers: {'Authorization': token},
-            //     ),
-            //     data: FormData.fromMap({'title': 'chat1'}));
-            // print("request done");

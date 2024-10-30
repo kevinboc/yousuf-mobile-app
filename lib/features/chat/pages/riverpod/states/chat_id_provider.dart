@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//TODO: CHANGE/UPDATE THIS ON PAGE CHANGES
 class GetCID extends StateNotifier<String> {
   GetCID() : super('');
 
