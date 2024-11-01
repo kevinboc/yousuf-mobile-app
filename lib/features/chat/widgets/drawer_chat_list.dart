@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logger/logger.dart';
+import 'package:yousuf_mobile_app/core/api/api_list.dart';
+import 'package:yousuf_mobile_app/core/api/dio_client.dart';
 import 'package:yousuf_mobile_app/models/chat.dart';
 import 'package:yousuf_mobile_app/screens/chat.dart';
+
+final _dio = DioClient();
+final Logger _logger = Logger();
+
+const FlutterSecureStorage storage = FlutterSecureStorage();
 
 class DrawerChatList extends StatefulWidget {
   const DrawerChatList({super.key});
@@ -10,71 +19,56 @@ class DrawerChatList extends StatefulWidget {
 }
 
 class _DrawerChatListState extends State<DrawerChatList> {
-  List<Chat> chatList = [
-    Chat(
-      id: "1",
-      title: "Foobar On A Stick With Fries",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "2",
-      title: "My afternoon with the AI",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "3",
-      title: "The time I met a chatbot",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "4",
-      title: "Brave New World: Analysis",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "5",
-      title: "Quantum Entanglement",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "6",
-      title: "Shrek 5: The Return of the Ogre",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "7",
-      title: "The time I met a chatbot",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "8",
-      title: "King Crimson: The Band",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "9",
-      title: "Why I hate the color blue",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "10",
-      title: "Top 10 reasons why I love the color blue",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "11",
-      title: "The time I met a chatbot",
-      lastUpdated: DateTime.now(),
-    ),
-    Chat(
-      id: "12",
-      title: "Quick brown fox jumps over the lazy dog",
-      lastUpdated: DateTime.now(),
-    ),
-  ];
+  bool _isLoading = true;
+  List<Chat> chatList = [];
+
+  Future<void> _fetchChats() async {
+    String? token = await storage.read(key: 'login_token');
+
+    final response = await _dio.getRequest(
+      APIList.chats,
+      token: token,
+      converter: (response) {
+        List<Chat> chatList = [];
+        for (final chat in response) {
+          chatList.add(Chat(
+            id: chat['id'],
+            title: chat['title'],
+            lastUpdated: DateTime.now(),
+          ));
+        }
+        return chatList;
+      },
+      isIsolate: false,
+    );
+
+    response.fold((error) {
+      _logger.e("Error getting chat list: $error");
+    }, (chatList) {
+      setState(() {
+        this.chatList = chatList;
+      });
+    });
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchChats();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [
