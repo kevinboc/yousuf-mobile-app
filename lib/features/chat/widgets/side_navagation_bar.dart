@@ -28,7 +28,7 @@ Widget menuOptions(BuildContext context) {
           ListTile(
               title: const Text("Chats"),
               onTap: () {
-                context.go('/chat_list');
+                context.go('/chats');
                 Navigator.pop(context);
               }),
           ListTile(

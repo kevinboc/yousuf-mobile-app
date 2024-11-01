@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 // Features
 import 'package:yousuf_mobile_app/features/chat%20list/pages/chat_list_page.dart';
 import 'package:yousuf_mobile_app/features/chat%20list/widgets/chat_list_view.dart';
+import 'package:yousuf_mobile_app/screens/home.dart';
 import 'features/features.dart';
 
 Future<void> main() async {
@@ -14,9 +15,16 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-final GoRouter _router = GoRouter(initialLocation: '/', routes: <RouteBase>[
+final GoRouter _router =
+    GoRouter(initialLocation: '/chats', routes: <RouteBase>[
   GoRoute(
       path: '/',
+      name: "home",
+      builder: (context, state) {
+        return const HomeScreen();
+      }),
+  GoRoute(
+      path: '/chats',
       name: "chatlist",
       builder: (context, state) {
         return const ChatListPage();

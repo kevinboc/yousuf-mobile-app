@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yousuf_mobile_app/models/chat.dart';
+import 'package:yousuf_mobile_app/screens/chat.dart';
 
 class DrawerChatList extends StatefulWidget {
   const DrawerChatList({super.key});
@@ -104,7 +105,12 @@ class _DrawerChatItem extends StatelessWidget {
         overflow: TextOverflow.fade,
         softWrap: false,
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx) => ChatScreen(chat: chat)),
+        );
+      },
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:yousuf_mobile_app/features/chat/widgets/drawer_chat_list.dart';
-import 'package:yousuf_mobile_app/models/chat.dart';
 
 FlutterSecureStorage _storage = FlutterSecureStorage();
 final Logger _logger = Logger();
