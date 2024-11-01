@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:yousuf_mobile_app/features/chat/widgets/drawer_chat_list.dart';
+import 'package:yousuf_mobile_app/models/chat.dart';
 
 FlutterSecureStorage _storage = FlutterSecureStorage();
 final Logger _logger = Logger();
@@ -69,26 +71,7 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _DrawerChatItem(chatTitle: "Foobar On A Stick With Fries"),
-                  _DrawerChatItem(chatTitle: "My afternoon with the AI"),
-                  _DrawerChatItem(chatTitle: "The time I met a chatbot"),
-                  _DrawerChatItem(chatTitle: "Brave New World: Analysis"),
-                  _DrawerChatItem(chatTitle: "Quantum Entanglement"),
-                  _DrawerChatItem(chatTitle: "Shrek 5: The Return of the Ogre"),
-                  _DrawerChatItem(chatTitle: "The time I met a chatbot"),
-                  _DrawerChatItem(chatTitle: "King Crimson: The Band"),
-                  _DrawerChatItem(chatTitle: "Why I hate the color blue"),
-                  _DrawerChatItem(
-                      chatTitle: "Top 10 reasons why I love the color blue"),
-                  _DrawerChatItem(chatTitle: "The time I met a chatbot"),
-                  _DrawerChatItem(
-                      chatTitle: "Quick brown fox jumps over the lazy dog"),
-                ],
-              ),
-            ),
+            child: DrawerChatList(),
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -111,31 +94,6 @@ class MainDrawer extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _DrawerChatItem extends StatelessWidget {
-  const _DrawerChatItem({required this.chatTitle});
-
-  final String chatTitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        Icons.chat_bubble,
-        size: 26,
-      ),
-      title: Text(
-        chatTitle,
-        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              fontSize: 20,
-            ),
-        overflow: TextOverflow.fade,
-        softWrap: false,
-      ),
-      onTap: () {},
     );
   }
 }
