@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:yousuf_mobile_app/features/chat%20list/pages/chat_list_page.dart';
 import 'package:yousuf_mobile_app/features/chat%20list/widgets/chat_list_view.dart';
 import 'package:yousuf_mobile_app/screens/home.dart';
+import 'package:yousuf_mobile_app/features/upload/pages/upload_page.dart';
+
 import 'features/features.dart';
 
 Future<void> main() async {
@@ -41,14 +43,20 @@ final GoRouter _router =
       builder: (context, state) {
         return const RegisterPage();
       }),
-  GoRoute(path: '/ai_list', builder: (context, state) => const Placeholder()),
   GoRoute(
       path: '/chat',
       name: "chat",
       builder: (context, state) {
         final ChatDetails details = state.extra as ChatDetails;
         return ChatPage(details);
-      })
+      },
+      routes: [
+        GoRoute(
+            path: '/upload',
+            builder: (context, state) {
+              return UploadPage();
+            })
+      ])
 ]);
 
 class MyApp extends StatelessWidget {
