@@ -102,7 +102,8 @@ class _DrawerChatItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pop();
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (ctx) => ChatScreen(chat: chat)),
+          MaterialPageRoute(
+              builder: (ctx) => ChatScreen(loadingChat: Future.value(chat))),
         );
       },
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yousuf_mobile_app/features/chat/widgets/main_drawer.dart';
+import 'package:yousuf_mobile_app/widgets/new_chat_message.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,27 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("YouSuf Chat"),
       ),
-      body: const Text("TODO: Design the home screen"),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+                child: Text(
+              "Start your conversation with YouSuf!",
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).primaryColor),
+            )),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 20,
+            ),
+            child: NewChatMessage(),
+          ),
+        ],
+      ),
     );
   }
 }
