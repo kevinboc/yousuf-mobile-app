@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yousuf_mobile_app/models/chat.dart';
-import 'package:yousuf_mobile_app/models/chat_message.dart';
 import 'package:yousuf_mobile_app/widgets/chat_list.dart';
 import 'package:yousuf_mobile_app/widgets/new_message.dart';
 
@@ -47,22 +46,12 @@ class _ChatScreenState extends State<ChatScreen> {
               });
             });
 
-            final chatMessages = [
-              ChatMessage(message: "Hello", isUser: true),
-              ChatMessage(
-                  message:
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                  isUser: false),
-              ChatMessage(
-                  message:
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                  isUser: true),
-            ];
-
             return Column(
               children: [
                 Expanded(
-                  child: ChatList(messages: chatMessages),
+                  child: ChatList(
+                    chat: snapshot.data!,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
