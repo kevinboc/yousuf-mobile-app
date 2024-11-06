@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
-import 'package:yousuf_mobile_app/core/api/api.dart';
-
-final _dio = DioClient();
-const FlutterSecureStorage storage = FlutterSecureStorage();
 
 class NewMessage extends StatefulWidget {
-  const NewMessage({super.key});
+  const NewMessage({required this.enabled, required this.onSend, super.key});
+
+  final Future<void> Function(String message) onSend;
+  final bool enabled;
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -17,9 +15,8 @@ class _NewMessageState extends State<NewMessage> {
   final TextEditingController _controller = TextEditingController();
   final Logger _logger = Logger();
 
-  void _sendMessage() async {
+  void _sendMessage() {
     final enteredMessage = _controller.text;
-
     if (enteredMessage.trim().isEmpty) {
       return;
     }
@@ -30,6 +27,9 @@ class _NewMessageState extends State<NewMessage> {
 
     // Send message to LLM
     _logger.i("Message sent: $enteredMessage");
+
+    // Fetch response from LLM
+    widget.onSend(enteredMessage);
   }
 
   @override
@@ -54,7 +54,7 @@ class _NewMessageState extends State<NewMessage> {
           IconButton(
             color: Theme.of(context).primaryColor,
             icon: const Icon(Icons.send),
-            onPressed: _sendMessage,
+            onPressed: widget.enabled ? _sendMessage : null,
           )
         ],
       ),

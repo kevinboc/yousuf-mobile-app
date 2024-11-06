@@ -62,8 +62,11 @@ class _NewChatMessageState extends State<NewChatMessage> {
     // Navigate to new chat screen
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (ctx) =>
-              ChatScreen(loadingChat: _createNewChat(enteredMessage))),
+        builder: (ctx) => ChatScreen(
+          loadingChat: _createNewChat(enteredMessage),
+          firstMessage: enteredMessage,
+        ),
+      ),
     );
   }
 
