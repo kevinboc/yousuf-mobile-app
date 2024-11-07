@@ -23,15 +23,16 @@ class _NewChatMessageState extends State<NewChatMessage> {
     String? token = await storage.read(key: 'login_token');
 
     final response = await _dio.postRequest(
-      APIList.chats,
+      "${APIList.chats}/create",
       data: {
-        'title': enteredMessage,
+        'prompt': enteredMessage,
       },
       converter: (res) {
         _logger.i("Chat created: $res");
+
         return Chat(
-          id: res['id'],
-          title: res['title'],
+          id: res["chat"]['id'],
+          title: res["chat"]['title'],
           lastUpdated: DateTime.now(),
         );
       },
@@ -62,10 +63,8 @@ class _NewChatMessageState extends State<NewChatMessage> {
     // Navigate to new chat screen
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => ChatScreen(
-          loadingChat: _createNewChat(enteredMessage),
-          firstMessage: enteredMessage,
-        ),
+        builder: (ctx) =>
+            ChatScreen(loadingChat: _createNewChat(enteredMessage)),
       ),
     );
   }

@@ -13,10 +13,9 @@ final Logger _logger = Logger();
 const FlutterSecureStorage _storage = FlutterSecureStorage();
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({this.firstMessage, required this.loadingChat, super.key});
+  const ChatScreen({required this.loadingChat, super.key});
 
   final Future<Chat> loadingChat;
-  final String? firstMessage;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -109,12 +108,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     _chatFuture = widget.loadingChat;
-    if (widget.firstMessage != null) {
-      _fetchResponse(widget.firstMessage!);
-    } else {
-      _loadingMessages = true;
-      _fetchChatMessages();
-    }
+    _loadingMessages = true;
+    _fetchChatMessages();
     super.initState();
   }
 
