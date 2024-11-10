@@ -6,6 +6,7 @@ import 'package:yousuf_mobile_app/core/api/dio_client.dart';
 import 'package:yousuf_mobile_app/models/chat.dart';
 import 'package:yousuf_mobile_app/models/chat_message.dart';
 import 'package:yousuf_mobile_app/widgets/chat_list.dart';
+import 'package:yousuf_mobile_app/widgets/edit_chat.dart';
 import 'package:yousuf_mobile_app/widgets/new_message.dart';
 
 final _dio = DioClient();
@@ -26,8 +27,18 @@ class _ChatScreenState extends State<ChatScreen> {
 
   var _chatTitle = "Loading chat...";
   List<ChatMessage> _chatMessages = [];
+  var _loadingChat = true;
   var _loadingMessages = false;
   var _loadingResponse = false;
+
+  Future<void> _fetchChat() async {
+    final chat = await _chatFuture;
+
+    setState(() {
+      _chatTitle = chat.title;
+      _loadingChat = false;
+    });
+  }
 
   Future<void> _fetchChatMessages() async {
     final chat = await _chatFuture;
@@ -105,66 +116,78 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  void _openEditChatOverlay() async {
+    final newChatTitle = await showModalBottomSheet<String>(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => EditChat(
+        chatTitle: _chatTitle,
+      ),
+    );
+
+    _logger.i(newChatTitle);
+
+    if (newChatTitle != null) {
+      setState(() {
+        _chatTitle = newChatTitle;
+      });
+    }
+  }
+
   @override
   void initState() {
     _chatFuture = widget.loadingChat;
     _loadingMessages = true;
+    _fetchChat();
     _fetchChatMessages();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget content = const Center(
+      child: CircularProgressIndicator(),
+    );
+
+    if (!_loadingChat) {
+      if (_loadingMessages) {
+        content = const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else {
+        content = Column(
+          children: [
+            Expanded(
+              child: ChatList(
+                chatMessages: _chatMessages,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 20,
+              ),
+              child: NewMessage(
+                enabled: !_loadingMessages && !_loadingResponse,
+                onSend: _fetchResponse,
+              ),
+            ),
+          ],
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_chatTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_document),
+            onPressed: _openEditChatOverlay,
+          ),
+        ],
       ),
-      body: FutureBuilder<Chat>(
-        future: _chatFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text("Error: ${snapshot.error}"),
-            );
-          } else {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                _chatTitle = snapshot.data!.title;
-              });
-            });
-
-            if (_loadingMessages) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            return Column(
-              children: [
-                Expanded(
-                  child: ChatList(
-                    chatMessages: _chatMessages,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 20,
-                  ),
-                  child: NewMessage(
-                    enabled: !_loadingMessages && !_loadingResponse,
-                    onSend: _fetchResponse,
-                  ),
-                ),
-              ],
-            );
-          }
-        },
-      ),
+      body: content,
     );
   }
 }
