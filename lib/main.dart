@@ -52,9 +52,10 @@ final GoRouter _router =
       },
       routes: [
         GoRoute(
-            path: '/upload',
+            path: 'upload',
             builder: (context, state) {
-              return UploadPage();
+              final chatID = state.extra as String;
+              return UploadPage(chatID);
             })
       ])
 ]);

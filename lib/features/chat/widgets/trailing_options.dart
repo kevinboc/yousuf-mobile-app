@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-Widget trailingOptions(BuildContext buildContext, String chatID) {
+Widget trailingOptions(String chatID) {
   return PopupMenuButton(
       itemBuilder: (context) => [
             PopupMenuItem(
                 child: const Text("Upload File"),
-                onTap: () => buildContext.go("/chat/upload")),
+                onTap: () {
+                  context.push("/chat/upload", extra: chatID);
+                }),
             PopupMenuItem(
                 child: const Text("Rename Chat"),
                 onTap: () => AlertDialog(
@@ -22,6 +24,6 @@ Widget trailingOptions(BuildContext buildContext, String chatID) {
                     )),
             PopupMenuItem(
                 child: const Text("Delete Chat"),
-                onTap: () => buildContext.go("/home"))
+                onTap: () => context.go("/home"))
           ]);
 }

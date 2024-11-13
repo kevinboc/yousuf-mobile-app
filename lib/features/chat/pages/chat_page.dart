@@ -16,7 +16,7 @@ class ChatPage extends StatelessWidget {
         drawer: Drawer(child: menuOptions(context)),
         appBar: AppBar(
           title: Text(chatDetails.chatTitle),
-          actions: [trailingOptions(context, chatDetails.chatID)],
+          actions: [trailingOptions(chatDetails.chatID)],
         ),
         body: Column(children: [
           Expanded(child: MessageListView(chatID: chatDetails.chatID)),
