@@ -179,4 +179,91 @@ class DioClient {
       return Left(ServerFailure(errorMsg));
     }
   }
+
+// POST request function
+  Future<Either<Failure, T>> putRequest<T>(String url,
+      {required Map<String, dynamic> data,
+      required ResponseConverter<T> converter,
+      required bool token,
+      required bool isIsolate,
+      String? tokenVal}) async {
+    try {
+      _logger.i("Dio Client: Trying post request");
+      _logger.i("Dio Client: ${data.toString()}");
+
+      // Convert data json to FormData
+      final formData = FormData.fromMap(data);
+
+      // Calls post method in dio instance
+      final response = await _dio.put(url,
+          data: formData,
+          options: (tokenVal != null)
+              ? Options(headers: {'Authorization': tokenVal})
+              : null);
+
+      _logger.i("Dio Client: After calling dio post method");
+
+      // Check if response status code is good
+      if ((response.statusCode ?? 0) < 200 ||
+          (response.statusCode ?? 0) > 201) {
+        _logger.i("Dio Client: Throwing DioException");
+        throw DioException(
+            requestOptions: response.requestOptions, response: response);
+      }
+
+      // Logging response
+      _logger.i("Dio Client: Response Data = ${response.data}");
+
+      // Logging Authorizaion header. This method works for multiple values
+      // _logger.i(
+      //     "Dio Client: Response Header (Authorization) = ${response.headers["Authorization"]}");
+
+      // Logging Authorization header. This method only works if it is a single value
+
+      // Authorization Token
+      final authorizationHeader = response.headers.value("Authorization");
+      _logger.i(
+          "Dio Client: Response Header (Authorization) = $authorizationHeader");
+
+      // Logging token boolean value
+      _logger.i("Dio Client: token = $token");
+
+      final mapData = Map<String, dynamic>.from(response.data);
+      _logger.i("Dio Client: Type of mapData = ${mapData.runtimeType}");
+      _logger.i("Dio Client: mapData = $mapData");
+      mapData["token"] = authorizationHeader;
+      _logger.i("Dio Client: mapData with token = $mapData");
+
+      // Check if isolation is not needed
+      if (!isIsolate) {
+        _logger.i("Dio Client: Not Isolate");
+        return Right(converter(mapData));
+      }
+
+      // Create isolate parser instance
+      final isolateParser = IsolateParser<T>(mapData, converter);
+
+      // Wait for parsing result
+      final result = await isolateParser.parseInBackground();
+
+      // Post Request Succeeded
+      _logger.i("Dio Client (Isolater Parser): Result = $result");
+
+      return Right(result);
+    } on DioException catch (e) {
+      _logger.i("Dio Client: Request URL = ${e.requestOptions.uri}");
+      _logger.i("Dio Client: ServerFailure");
+
+      // Update error message according to status code
+      var statusCode = e.response?.statusCode;
+
+      const errorMsg = "Server Failure";
+
+      if (statusCode != null) {
+        return Left(ServerFailure(errorMsg, statusCode: statusCode));
+      }
+
+      return Left(ServerFailure(errorMsg));
+    }
+  }
 }

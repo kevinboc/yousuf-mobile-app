@@ -40,6 +40,50 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  Future<bool> _updateChatTitle(String newTitle, String currTitle) async {
+    setState(() {
+      _chatTitle = newTitle;
+    });
+
+    final chat = await _chatFuture;
+
+    String? token = await _storage.read(key: 'login_token');
+
+    final response = await _dio.putRequest(
+      "${APIList.chats}/${chat.id}",
+      data: {
+        'title': newTitle,
+      },
+      converter: (res) {
+        _logger.i("Chat updated: $res");
+        return true;
+      },
+      token: true,
+      isIsolate: false,
+      tokenVal: token,
+    );
+
+    return response.fold((error) {
+      _logger.e("Error updating chat: $error");
+
+      setState(() {
+        _chatTitle = currTitle;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error syncing chat title update. Please try again."),
+        duration: const Duration(seconds: 5),
+        backgroundColor: Theme.of(context).colorScheme.error,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+      ));
+
+      return false;
+    }, (success) {
+      return success;
+    });
+  }
+
   Future<void> _fetchChatMessages() async {
     final chat = await _chatFuture;
 
@@ -61,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
       isIsolate: false,
     );
 
-    return response.fold((error) {
+    response.fold((error) {
       _logger.e("Error getting chat messages: $error");
       throw error;
     }, (messagesList) {
@@ -117,20 +161,16 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _openEditChatOverlay() async {
+    final chat = await _chatFuture;
+
     final newChatTitle = await showModalBottomSheet<String>(
       isScrollControlled: true,
       context: context,
-      builder: (ctx) => EditChat(
-        chatTitle: _chatTitle,
-      ),
+      builder: (ctx) => EditChat(chat: chat),
     );
 
-    _logger.i(newChatTitle);
-
-    if (newChatTitle != null) {
-      setState(() {
-        _chatTitle = newChatTitle;
-      });
+    if (newChatTitle != null && newChatTitle != _chatTitle) {
+      _updateChatTitle(newChatTitle, _chatTitle);
     }
   }
 

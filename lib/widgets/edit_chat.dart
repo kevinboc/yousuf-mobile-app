@@ -1,10 +1,21 @@
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as fss;
+import 'package:logger/logger.dart';
+import 'package:yousuf_mobile_app/core/api/api.dart';
+import 'package:yousuf_mobile_app/models/chat.dart';
+import 'package:yousuf_mobile_app/models/uploaded_file.dart';
+
+final _dio = DioClient();
+final Logger _logger = Logger();
+const fss.FlutterSecureStorage _storage = fss.FlutterSecureStorage();
+final serverURL = "https://yousuf195.azurewebsites.net";
 
 class EditChat extends StatefulWidget {
-  const EditChat({required this.chatTitle, super.key});
+  const EditChat({required this.chat, super.key});
 
-  final String chatTitle;
+  final Chat chat;
 
   @override
   State<EditChat> createState() => _EditChatState();
@@ -13,11 +24,77 @@ class EditChat extends StatefulWidget {
 class _EditChatState extends State<EditChat> {
   var _title = "";
 
-  final _uploadedFiles = [];
+  List<UploadedFile> _uploadedFiles = [];
+  var _filesLoading = true;
 
-  Future<bool> _uploadFile() async {
-    await Future.delayed(const Duration(seconds: 5));
-    return true;
+  // Get list of files uploaded to the chat
+  Future<void> _getUploadedFiles() async {
+    setState(() {
+      _filesLoading = true;
+    });
+    String? token = await _storage.read(key: 'login_token');
+
+    final response = await _dio.getRequest(
+      "${APIList.chats}/${widget.chat.id}/uploaded_texts",
+      token: token,
+      converter: (res) {
+        List<UploadedFile> files = [];
+        for (var file in res) {
+          files.add(UploadedFile(
+            id: file['id'],
+            fileName: file['file_name'],
+            fileSize: file['file_size'],
+            fileType: file['file_type'],
+            uploadedAt: file['uploaded_at'],
+          ));
+        }
+        return files;
+      },
+      isIsolate: false,
+    );
+
+    setState(() {
+      _filesLoading = false;
+    });
+
+    response.fold((error) {
+      _logger.e("Error getting uploaded files: $error");
+      throw error;
+    }, (files) {
+      setState(() {
+        _uploadedFiles = files;
+      });
+    });
+  }
+
+  Future<UploadedFile> _uploadFile(FilePickerResult file) async {
+    String? token = await _storage.read(key: 'login_token');
+
+    final Dio dio = Dio();
+
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(file.files.single.path!),
+    });
+
+    final response = await dio.post(
+        "$serverURL${APIList.chats}/${widget.chat.id}/upload_text",
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": token,
+        }));
+
+    if (response.statusCode == 200) {
+      return UploadedFile(
+        id: response.data['id'],
+        fileName: file.files.single.name,
+        fileSize: file.files.single.size,
+        fileType: response.data['file_type'],
+        uploadedAt: DateTime.now().toString(),
+      );
+    } else {
+      throw "Error uploading file";
+    }
   }
 
   Future<void> _pickFile() async {
@@ -29,6 +106,7 @@ class _EditChatState extends State<EditChat> {
     if (result != null) {
       if (mounted) {
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (BuildContext ctx) {
             return const AlertDialog(
@@ -47,13 +125,12 @@ class _EditChatState extends State<EditChat> {
         );
 
         try {
-          final uploaded = await _uploadFile();
-          if (uploaded) {
-            setState(() {
-              _uploadedFiles.add(result.files.single.name);
-            });
-          }
+          final uploadedFile = await _uploadFile(result);
+          setState(() {
+            _uploadedFiles.add(uploadedFile);
+          });
         } catch (e) {
+          _logger.e("Error uploading file: $e");
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -78,7 +155,8 @@ class _EditChatState extends State<EditChat> {
 
   @override
   void initState() {
-    _title = widget.chatTitle;
+    _title = widget.chat.title;
+    _getUploadedFiles();
     super.initState();
   }
 
@@ -127,7 +205,11 @@ class _EditChatState extends State<EditChat> {
             ],
           ),
           const SizedBox(height: 16),
-          if (_uploadedFiles.isEmpty)
+          if (_filesLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          else if (_uploadedFiles.isEmpty)
             Expanded(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +224,7 @@ class _EditChatState extends State<EditChat> {
                 children: [
                   for (var file in _uploadedFiles)
                     ListTile(
-                      title: Text(file),
+                      title: Text(file.fileName),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
