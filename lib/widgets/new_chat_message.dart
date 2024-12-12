@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:yousuf_mobile_app/core/api/api.dart';
 import 'package:yousuf_mobile_app/models/chat.dart';
 import 'package:yousuf_mobile_app/screens/chat.dart';
@@ -18,6 +20,8 @@ class NewChatMessage extends StatefulWidget {
 class _NewChatMessageState extends State<NewChatMessage> {
   final TextEditingController _controller = TextEditingController();
   final Logger _logger = Logger();
+  final _speechToText = SpeechToText();
+  var _listening = false;
 
   Future<Chat> _createNewChat(String enteredMessage) async {
     String? token = await storage.read(key: 'login_token');
@@ -28,8 +32,6 @@ class _NewChatMessageState extends State<NewChatMessage> {
         'prompt': enteredMessage,
       },
       converter: (res) {
-        _logger.i("Chat created: $res");
-
         return Chat(
           id: res["chat"]['id'],
           title: res["chat"]['title'],
@@ -70,8 +72,50 @@ class _NewChatMessageState extends State<NewChatMessage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  /// This has to happen only once per app
+  void _initSpeech() async {
+    await _speechToText.initialize(onStatus: (status) {
+      if (status == 'listening') {
+        setState(() {
+          _listening = true;
+        });
+      } else {
+        setState(() {
+          _listening = false;
+        });
+      }
+    });
+    setState(() {});
+  }
+
+  /// Each time to start a speech recognition session
+  Future<void> _startListening() async {
+    await _speechToText.listen(onResult: _onSpeechResult);
+    setState(() {});
+  }
+
+  Future<void> _stopListening() async {
+    await _speechToText.stop();
+    setState(() {});
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    var newText = result.recognizedWords;
+    _controller.value = _controller.value.copyWith(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
+    _speechToText.stop();
     super.dispose();
   }
 
@@ -83,16 +127,35 @@ class _NewChatMessageState extends State<NewChatMessage> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(labelText: 'Send a message...'),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 150),
+              child: TextField(
+                controller: _controller,
+                decoration:
+                    const InputDecoration(labelText: 'Send a message...'),
+                maxLines: null,
+              ),
             ),
           ),
           IconButton(
             color: Theme.of(context).primaryColor,
             icon: const Icon(Icons.send),
             onPressed: _sendMessage,
-          )
+          ),
+          IconButton(
+            color: Theme.of(context).primaryColor,
+            icon: Icon(_listening ? Icons.stop : Icons.mic),
+            onPressed: () async {
+              if (await _speechToText.hasPermission &&
+                  _speechToText.isNotListening) {
+                await _startListening();
+              } else if (_speechToText.isListening) {
+                await _stopListening();
+              } else {
+                _initSpeech();
+              }
+            },
+          ),
         ],
       ),
     );

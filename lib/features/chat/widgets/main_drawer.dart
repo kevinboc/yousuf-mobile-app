@@ -12,21 +12,15 @@ class MainDrawer extends StatelessWidget {
 
   Future<void> _onLogout(BuildContext ctx) async {
     try {
-      _logger.i("Side Nav Bar:");
       await _storage.read(key: 'login_token');
-      _logger.i(
-          "Token before deleting: ${await _storage.read(key: 'login_token')}");
       await _storage.delete(key: 'login_token');
-      _logger.i("Checking if token was deleted");
-      String? token = await _storage.read(key: 'login_token');
-      _logger.i("Token : $token");
 
       if (ctx.mounted) {
         ctx.go('/login');
         Navigator.pop(ctx);
       }
     } catch (e) {
-      _logger.i("Error deleting login token");
+      _logger.e("Error logging out: $e");
     }
   }
 
