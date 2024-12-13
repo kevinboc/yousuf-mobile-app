@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:yousuf_mobile_app/features/chat/widgets/drawer_chat_list.dart';
 
-FlutterSecureStorage _storage = FlutterSecureStorage();
+FlutterSecureStorage _storage = const FlutterSecureStorage();
 final Logger _logger = Logger();
 
 class MainDrawer extends StatelessWidget {
@@ -12,21 +12,15 @@ class MainDrawer extends StatelessWidget {
 
   Future<void> _onLogout(BuildContext ctx) async {
     try {
-      _logger.i("Side Nav Bar:");
       await _storage.read(key: 'login_token');
-      _logger.i(
-          "Token before deleting: ${await _storage.read(key: 'login_token')}");
       await _storage.delete(key: 'login_token');
-      _logger.i("Checking if token was deleted");
-      String? token = await _storage.read(key: 'login_token');
-      _logger.i("Token : $token");
 
       if (ctx.mounted) {
         ctx.go('/login');
         Navigator.pop(ctx);
       }
     } catch (e) {
-      _logger.i("Error deleting login token");
+      _logger.e("Error logging out: $e");
     }
   }
 
@@ -69,16 +63,16 @@ class MainDrawer extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
+          const Expanded(
             child: DrawerChatList(),
           ),
           Padding(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               bottom: 8,
               top: 6,
             ),
             child: ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.logout,
                 size: 26,
               ),

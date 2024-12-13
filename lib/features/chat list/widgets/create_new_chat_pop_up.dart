@@ -6,7 +6,7 @@ import 'package:yousuf_mobile_app/features/chat%20list/domain/usecases/make_new_
 import 'package:yousuf_mobile_app/features/chat%20list/widgets/chat_list_view.dart';
 
 Future createNewChat(BuildContext context) {
-  TextEditingController _controller = TextEditingController();
+  TextEditingController controller = TextEditingController();
   return showDialog(
       context: context,
       builder: (context) => Consumer(
@@ -14,7 +14,7 @@ Future createNewChat(BuildContext context) {
               return AlertDialog(
                 title: const Text("Create New Chat"),
                 content: TextField(
-                  controller: _controller,
+                  controller: controller,
                   decoration: const InputDecoration(hintText: "Name of Chat"),
                 ),
                 actions: [
@@ -23,7 +23,7 @@ Future createNewChat(BuildContext context) {
                       child: const Text("Cancel")),
                   TextButton(
                       onPressed: () async {
-                        String chatName = _controller.text;
+                        String chatName = controller.text;
                         final response = await ref
                             .read(createNewChatProvider)
                             .call(CreateNewChatParams(chatName: chatName));

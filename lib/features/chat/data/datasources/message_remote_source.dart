@@ -15,7 +15,7 @@ abstract class MessageRemoteDataSource {
 class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   final DioClient dio;
   MessageRemoteDataSourceImpl(this.dio);
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   @override
   Future<Either<Failure, ChatMessages>> getChatMessages(
       ChatMessagesParams params) async {

@@ -6,7 +6,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../../core.dart';
 
 final internetConnectionProvider = Provider<InternetConnectionChecker>((ref) {
-  return InternetConnectionChecker();
+  return InternetConnectionChecker.createInstance();
 });
 
 final networkInfoProvider = Provider<NetworkInfo>((ref) {
