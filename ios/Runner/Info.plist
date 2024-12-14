@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Foobar</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Foobar</string>
 </dict>
 </plist>

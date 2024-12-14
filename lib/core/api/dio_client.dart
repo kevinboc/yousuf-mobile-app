@@ -164,6 +164,7 @@ class DioClient {
 
       return Right(result);
     } on DioException catch (e) {
+      _logger.e("Dio Client: Request URL = $e");
       _logger.i("Dio Client: Request URL = ${e.requestOptions.uri}");
       _logger.i("Dio Client: ServerFailure");
 

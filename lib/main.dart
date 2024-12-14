@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-// Features
-import 'package:yousuf_mobile_app/features/chat%20list/pages/chat_list_page.dart';
-import 'package:yousuf_mobile_app/features/chat%20list/widgets/chat_list_view.dart';
 import 'package:yousuf_mobile_app/screens/home.dart';
-import 'package:yousuf_mobile_app/features/upload/pages/upload_page.dart';
 
 import 'features/features.dart';
 
@@ -17,19 +12,12 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-final GoRouter _router =
-    GoRouter(initialLocation: '/chats', routes: <RouteBase>[
+final GoRouter _router = GoRouter(initialLocation: '/', routes: <RouteBase>[
   GoRoute(
       path: '/',
       name: "home",
       builder: (context, state) {
         return const HomeScreen();
-      }),
-  GoRoute(
-      path: '/chats',
-      name: "chatlist",
-      builder: (context, state) {
-        return const ChatListPage();
       }),
   GoRoute(
       path: '/login',
@@ -43,21 +31,6 @@ final GoRouter _router =
       builder: (context, state) {
         return const RegisterPage();
       }),
-  GoRoute(
-      path: '/chat',
-      name: "chat",
-      builder: (context, state) {
-        final ChatDetails details = state.extra as ChatDetails;
-        return ChatPage(details);
-      },
-      routes: [
-        GoRoute(
-            path: 'upload',
-            builder: (context, state) {
-              final chatID = state.extra as String;
-              return UploadPage(chatID);
-            })
-      ])
 ]);
 
 class MyApp extends StatelessWidget {

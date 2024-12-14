@@ -4,13 +4,13 @@ import 'package:yousuf_mobile_app/core/core.dart';
 
 class CustomField extends StatelessWidget {
   const CustomField({
-    Key? key,
+    super.key,
     required this.title,
     required this.controller,
     this.isPassword = false,
     this.error,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final String title;
   final TextEditingController controller;

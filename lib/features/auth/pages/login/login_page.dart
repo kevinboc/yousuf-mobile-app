@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logger/logger.dart';
 import 'package:yousuf_mobile_app/core/extensions/extensions.dart';
 
 // Program files
@@ -19,9 +18,6 @@ class LoginPage extends ConsumerStatefulWidget {
 
 // Login page state
 class _LoginPageState extends ConsumerState<LoginPage> {
-  // Logger for development
-  final Logger _logger = Logger();
-
   var _enteredEmail = "";
   var _enteredPassword = "";
 
@@ -63,12 +59,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final orientation = MediaQuery.orientationOf(context);
-
-    _logger.i('Size of screen: ${size.width.round()}x${size.height.round()}');
-    _logger.i('Orientation of the screen: ${orientation.name}');
-
     final state = ref.watch(authNotifierProvider);
     ref.listen(
       authNotifierProvider.select((value) => value),
