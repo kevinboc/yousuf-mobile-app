@@ -5,8 +5,7 @@ import 'package:yousuf_mobile_app/features/chat/widgets/message_item.dart';
 
 class MessageListView extends ConsumerWidget {
   final String chatID;
-  MessageListView({super.key, required this.chatID});
-  final ScrollController _scrollController = ScrollController();
+  const MessageListView({super.key, required this.chatID});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,7 +14,7 @@ class MessageListView extends ConsumerWidget {
     //     duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
     return state.isEmpty
         //TODO: REPLACE PLACHOLDER WITH SUGGESTION TELLING USER TO ASK QUESTION OR UPLOAD FILE
-        ? Placeholder()
+        ? const Placeholder()
         : ListView.builder(
             itemCount: state.data.length,
             itemBuilder: (context, index) {

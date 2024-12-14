@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 
 Logger _logger = Logger();
-FlutterSecureStorage storage = FlutterSecureStorage();
+FlutterSecureStorage storage = const FlutterSecureStorage();
 
 Widget menuOptions(BuildContext context) {
   return Column(
@@ -68,14 +68,8 @@ Widget menuOptions(BuildContext context) {
 
 Future<void> deleteToken() async {
   try {
-    _logger.i("Side Nav Bar:");
     await storage.read(key: 'login_token');
-    _logger
-        .i("Token before deleting: ${await storage.read(key: 'login_token')}");
     await storage.delete(key: 'login_token');
-    _logger.i("Checking if token was deleted");
-    String? token = await storage.read(key: 'login_token');
-    _logger.i("Token : $token");
   } catch (e) {
     _logger.i("Error deleting login token");
   }

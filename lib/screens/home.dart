@@ -8,8 +8,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: const MainDrawer(),
+      drawer: const Drawer(
+        child: MainDrawer(),
       ),
       appBar: AppBar(
         title: const Text("YouSuf Chat"),
@@ -26,8 +26,8 @@ class HomeScreen extends StatelessWidget {
                   color: Theme.of(context).primaryColor),
             )),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
+          const Padding(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 20,
             ),

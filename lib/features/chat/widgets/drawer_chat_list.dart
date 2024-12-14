@@ -87,7 +87,7 @@ class _DrawerChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(
+      leading: const Icon(
         Icons.chat_bubble,
         size: 26,
       ),

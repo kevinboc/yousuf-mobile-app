@@ -19,7 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   // Flutter Secure Storage
   final FlutterSecureStorage secureStorage =
-      FlutterSecureStorage(); // ignore 'const' suggestion
+      const FlutterSecureStorage(); // ignore 'const' suggestion
 
   // Logger for development
   final Logger _logger = Logger();

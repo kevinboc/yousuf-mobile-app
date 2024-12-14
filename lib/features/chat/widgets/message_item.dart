@@ -12,10 +12,10 @@ Widget messageItem(Message content) {
           borderRadius: BorderRadius.circular(5), color: Colors.blue),
       child: Text(content.message),
     ),
-    Text(
+    const Text(
       // content.time.toString().substring(10, content.time.toString().length - 1),
       "You",
-      style: const TextStyle(fontSize: 12),
+      style: TextStyle(fontSize: 12),
     )
   ]);
 }

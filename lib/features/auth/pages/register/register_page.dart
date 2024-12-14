@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logger/logger.dart';
 import 'package:yousuf_mobile_app/core/extensions/extensions.dart';
 
 // Program files
@@ -19,9 +18,6 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 // Login page state
 class _RegisterPageState extends ConsumerState<RegisterPage> {
-  // Logger for development
-  final Logger _logger = Logger();
-
   // Variables
   var _enteredEmail = "";
   var _enteredPassword = "";
@@ -81,8 +77,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     if (value == null || value.isEmpty) {
       return "Please confirm your password.";
     }
-    _logger.i('Entered Password: $_currPassword');
-    _logger.i('Value: $value');
     if (value != _currPassword) {
       return 'Passwords do not match.';
     }
@@ -91,12 +85,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final orientation = MediaQuery.orientationOf(context);
-
-    _logger.i('Size of screen: ${size.width.round()}x${size.height.round()}');
-    _logger.i('Orientation of the screen: ${orientation.name}');
-
     final state = ref.watch(registerNotifierProvider);
     ref.listen(
       registerNotifierProvider.select((value) => value),

@@ -55,7 +55,6 @@ class _ChatScreenState extends State<ChatScreen> {
         'title': newTitle,
       },
       converter: (res) {
-        _logger.i("Chat updated: $res");
         return true;
       },
       token: true,
@@ -71,7 +70,8 @@ class _ChatScreenState extends State<ChatScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error syncing chat title update. Please try again."),
+        content:
+            const Text("Error syncing chat title update. Please try again."),
         duration: const Duration(seconds: 5),
         backgroundColor: Theme.of(context).colorScheme.error,
         behavior: SnackBarBehavior.floating,
@@ -110,7 +110,6 @@ class _ChatScreenState extends State<ChatScreen> {
       throw error;
     }, (messagesList) {
       setState(() {
-        _logger.i("Chat messages fetched");
         _chatMessages = messagesList;
         _loadingMessages = false;
       });
@@ -138,7 +137,6 @@ class _ChatScreenState extends State<ChatScreen> {
         'prompt': enteredMessage,
       },
       converter: (res) {
-        _logger.i("Chat created: $res");
         return ChatMessage(
           message: res["message"],
           isUser: false,
@@ -202,14 +200,23 @@ class _ChatScreenState extends State<ChatScreen> {
                 chatMessages: _chatMessages,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 20,
-              ),
-              child: NewMessage(
-                enabled: !_loadingMessages && !_loadingResponse,
-                onSend: _fetchResponse,
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                top: BorderSide(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(50),
+                  width: 2,
+                ),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: NewMessage(
+                  enabled: !_loadingMessages && !_loadingResponse,
+                  onSend: _fetchResponse,
+                ),
               ),
             ),
           ],

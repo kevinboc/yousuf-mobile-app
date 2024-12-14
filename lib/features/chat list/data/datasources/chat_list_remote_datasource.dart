@@ -15,7 +15,7 @@ abstract class ChatListRemoteDataSource {
 class ChatListRemoteDataSourceImpl implements ChatListRemoteDataSource {
   final DioClient dio;
   ChatListRemoteDataSourceImpl({required this.dio});
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   @override
   Future<Either<Failure, UserChatList>> getChats() async {
     String? token = await storage.read(key: 'login_token');

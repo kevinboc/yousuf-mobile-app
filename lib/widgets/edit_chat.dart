@@ -10,7 +10,7 @@ import 'package:yousuf_mobile_app/models/uploaded_file.dart';
 final _dio = DioClient();
 final Logger _logger = Logger();
 const fss.FlutterSecureStorage _storage = fss.FlutterSecureStorage();
-final serverURL = "https://yousuf195.azurewebsites.net";
+const serverURL = "https://yousuf195.azurewebsites.net";
 
 class EditChat extends StatefulWidget {
   const EditChat({required this.chat, super.key});
@@ -176,7 +176,7 @@ class _EditChatState extends State<EditChat> {
           const SizedBox(height: 16),
           TextFormField(
             initialValue: _title,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Chat Title",
               border: OutlineInputBorder(),
             ),
@@ -210,11 +210,11 @@ class _EditChatState extends State<EditChat> {
               child: CircularProgressIndicator(),
             )
           else if (_uploadedFiles.isEmpty)
-            Expanded(
+            const Expanded(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("No files uploaded yet"),
+                Text("No files uploaded yet"),
               ],
             ))
           else
